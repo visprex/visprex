@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Parser from './components/parser'
-import { inferSchema, transpose } from './utils'
+import { transpose } from './utils'
+import { inferSchema } from "@jsonhero/schema-infer";
+
 
 export default function App() {
   const [papaResult, setPapaResult] = useState<Papa.ParseResult<any> | null>(null);
