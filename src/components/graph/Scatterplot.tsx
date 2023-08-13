@@ -1,12 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { NumberSchema } from "../../utils/schema";
-// import { InteractionData, Tooltip } from './Tooltip';
-
-interface DataPoint {
-  x: number;
-  y: number;
-}
 
 interface ScatterplotProps {
     width: number;
@@ -84,8 +78,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   }, [xAxisIdx, yAxisIdx, xLogTransform, yLogTransform]);
 
   return (
-    <div>
-        <div key='x' style={{ height: 50 }}>
+    <div className='mx-auto'>
+        <div key='x'>
             <span>X:</span>
             {
                 keys.map((key: string, idx: number ) =>
@@ -108,7 +102,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="mb-4 flex items-center">
+        <div className="mb-4 items-center">
           <input
             id='x-log-checkbox'
             type="checkbox"
@@ -141,7 +135,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="mb-4 flex items-center">
+        <div className="mb-4 items-center">
           <input
             id="y-log-checkbox"
             type="checkbox"

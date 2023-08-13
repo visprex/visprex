@@ -56,7 +56,7 @@ export const HistogramTransition = ({
           }
       </div>
       <div>
-          <span>Transform (optional):</span>
+          <span>Transform:</span>
           {
               ['none', 'mean centering', 'log(x+1)'].map((key) => (
                 <button
