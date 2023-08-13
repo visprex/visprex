@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { NumberSchema } from "../../utils";
+import { NumberSchema } from "../../utils/schema";
 // import { InteractionData, Tooltip } from './Tooltip';
-
 
 interface DataPoint {
   x: number;
@@ -17,21 +16,12 @@ interface ScatterplotProps {
     keys: string[]
 }
 
-const buttonStyle = {
-  border: "1px solid #9a6fb0",
-  borderRadius: "3px",
-  padding: "0px 8px",
-  margin: "10px 2px",
-  fontSize: 14,
-  color: "#9a6fb0",
-  opacity: 0.7,
-};
-
-const Scatterplot: React.FC<ScatterplotProps> = ({ width, height, matrix, schema, keys }) => {
+export const Scatterplot = ({ width, height, matrix, schema, keys } : ScatterplotProps) => {
   const scatterRef = useRef<SVGSVGElement>(null);
   const [xAxisIdx, setXAxisIdx] = useState(0);
   const [yAxisIdx, setYAxisIdx] = useState(1);
-  // const [hovered, setHovered] = useState<InteractionData | null>(null);
+  const [xLogTransform, setXLogTransform] = useState(false);
+  const [yLogTransform, setYLogTransform] = useState(false);
 
   useEffect(() => {  
     const svg = d3.select(scatterRef.current!);
@@ -39,12 +29,22 @@ const Scatterplot: React.FC<ScatterplotProps> = ({ width, height, matrix, schema
     const boundsWidth = width - margin.left - margin.right;
     const boundsHeight = height - margin.top - margin.bottom;
 
+    const domain = {
+      x: [
+        xLogTransform ? Math.log(schema[xAxisIdx].range.min+1) : schema[xAxisIdx].range.min,
+        xLogTransform ? Math.log(schema[xAxisIdx].range.max+1) : schema[xAxisIdx].range.max
+      ],
+      y: [
+        yLogTransform ? Math.log(schema[yAxisIdx].range.min+1) : schema[yAxisIdx].range.min,
+        yLogTransform ? Math.log(schema[yAxisIdx].range.max+1) : schema[yAxisIdx].range.max
+      ]
+    };
     const xScale = d3.scaleLinear()
-      .domain([schema[xAxisIdx].range.min, schema[xAxisIdx].range.max])
+      .domain(domain.x)
       .range([0, boundsWidth]);
 
     const yScale = d3.scaleLinear()
-      .domain([schema[yAxisIdx].range.min, schema[yAxisIdx].range.max])
+      .domain(domain.y)
       .range([boundsHeight, 0]);
 
     const xAxis = d3.axisBottom(xScale);
@@ -66,55 +66,40 @@ const Scatterplot: React.FC<ScatterplotProps> = ({ width, height, matrix, schema
 
     const data = matrix[xAxisIdx].map((xValue, index) => ({
         name: index,
-        x: xValue,
-        y: matrix[yAxisIdx][index]
+        x: xLogTransform ? Math.log(xValue+1) : xValue,
+        y: yLogTransform ? Math.log(matrix[yAxisIdx][index]+1) : matrix[yAxisIdx][index]
       })
     );
 
-    // const allShapes = data.map((d, i) => {
-    //   return (
-    //     <circle
-    //       key={i}
-    //       r={8}
-    //       cx={xScale(d.x)}
-    //       cy={yScale(d.y)}
-    //       stroke="#e85252"
-    //       fill="#e85252"
-    //       fillOpacity={0.7}
-    //       onMouseEnter={() =>
-    //         setHovered({
-    //           xPos: xScale(d.x),
-    //           yPos: yScale(d.y),
-    //           name: String(d.name),
-    //         })
-    //       }
-    //       onMouseLeave={() => setHovered(null)}
-    //     />
-    //   );
-    // })
     plot.selectAll('.dot')
       .data(data)
       .enter().append('circle')
       .attr('class', 'dot')
-      .attr('fill', "#85252")
-      .attr('stroke', "#85252")
-      .attr('fillOpacity', 0.7)
+      .attr('fill', "#3F51B5")
+      .attr('stroke', "#3F51B5")
+      .attr('fill-opacity', 0.4)
       .attr('r', 5)
       .attr('cx', d => xScale(d.x))
       .attr('cy', d => yScale(d.y));
-  }, [xAxisIdx, yAxisIdx]);
+  }, [xAxisIdx, yAxisIdx, xLogTransform, yLogTransform]);
 
   return (
-    <>
+    <div>
         <div key='x' style={{ height: 50 }}>
             <span>X:</span>
             {
                 keys.map((key: string, idx: number ) =>
                     <button
                         key={key}
-                        style={buttonStyle}
+                        className={`
+                          border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                          rounded-md px-2 py-1 m-1 text-sm
+                          ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                          ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}`
+                        }
                         onClick={() => {
                             setXAxisIdx(idx)
+                            setXLogTransform(false)
                           }
                       }
                     >
@@ -123,15 +108,31 @@ const Scatterplot: React.FC<ScatterplotProps> = ({ width, height, matrix, schema
                 )
             }
         </div>
+        <div className="flex items-center mb-4">
+          <input
+            id='x-log-checkbox'
+            type="checkbox"
+            value=""
+            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            onChange={() => setXLogTransform(!xLogTransform)}
+          />
+          <label htmlFor="x-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
+        </div>
         <div>
             <span>Y: </span>
             {
                 keys.map((key: string, idx: number ) =>
                     <button
                         key={key}
-                        style={buttonStyle}
+                        className={`
+                          border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                          rounded-md px-2 py-1 m-1 text-sm
+                          ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                          ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}`
+                        }
                         onClick={() => {
                           setYAxisIdx(idx)
+                          setYLogTransform(false)
                         }
                       }
                     >
@@ -140,9 +141,18 @@ const Scatterplot: React.FC<ScatterplotProps> = ({ width, height, matrix, schema
                 )
             }
         </div>
+        <div className="flex items-center mb-4">
+          <input
+            id="y-log-checkbox"
+            type="checkbox"
+            value=""
+            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            onChange={() => setYLogTransform(!yLogTransform)}
+          />
+          <label htmlFor="y-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
+        </div>
         <svg ref={scatterRef} width={width} height={height}></svg>       
-    </>
+    </div>
   );
-}
+};
 
-export default Scatterplot;

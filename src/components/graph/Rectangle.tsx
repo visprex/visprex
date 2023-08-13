@@ -29,8 +29,8 @@ export const Rectangle = (props: RectangleProps) => {
       width={springProps.width}
       height={springProps.height}
       opacity={0.7}
-      stroke="#9d174d"
-      fill="#9d174d"
+      stroke="#3F51B5"
+      fill="#3F51B5"
       fillOpacity={0.3}
       strokeWidth={1}
       rx={1}
