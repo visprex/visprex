@@ -37,7 +37,7 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
 
   return (
     <>
-        <div className="h-12">
+        <div className="h-auto mb-2">
         {
           datasets.map((dataset, idx) => (
             <button

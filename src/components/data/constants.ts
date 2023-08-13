@@ -1,6 +1,10 @@
 export const bucketURL = "https://storage.googleapis.com/visprex/datasets/"
 export const datasets = [
     {
+        name: "iris.csv",
+        description: "",
+    },
+    {
         name: "winequality-red.csv",
         description: "",
     },  
@@ -13,7 +17,11 @@ export const datasets = [
         description: "",
     },
     {
-        name: "maple-syrup-production-2000-2021.csv",
+        name: "euro-economy-2022.csv",
+        description: "",
+    },
+    {
+        name: "maple-syrup.csv",
         description: "",
     },
 ]
