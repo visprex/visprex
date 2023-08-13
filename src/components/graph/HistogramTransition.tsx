@@ -37,7 +37,7 @@ export const HistogramTransition = ({
                 key={key}
                 className={`
                   border ${currentIdx === idx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                  rounded-md px-2 py-1 m-1 text-sm
+                  m-1 rounded-md px-2 py-1 text-sm
                   ${currentIdx === idx ? 'bg-indigo-500' : 'text-indigo-500'}
                   ${currentIdx === idx ? 'opacity-100' : 'opacity-70'}`
                 }
@@ -63,7 +63,7 @@ export const HistogramTransition = ({
                   key={key}
                   className={`
                     border ${currentTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                    rounded-md px-2 py-1 m-1 text-sm
+                    m-1 rounded-md px-2 py-1 text-sm
                     ${currentTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                     ${currentTransform === key ? 'opacity-100' : 'opacity-70'}`
                   }

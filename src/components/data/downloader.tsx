@@ -28,7 +28,7 @@ const Downloader: React.FC<DownloaderProps> = ({ onDataParsed }) => {
               key={idx}
               className={`
                 border ${datasetIdx === idx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                rounded-md px-2 py-1 m-1 text-sm
+                m-1 rounded-md px-2 py-1 text-sm
                 ${datasetIdx === idx ? 'bg-indigo-500' : 'text-indigo-500'}
                 ${datasetIdx === idx ? 'opacity-100' : 'opacity-70'}`
               }

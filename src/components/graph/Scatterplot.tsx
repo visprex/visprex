@@ -93,7 +93,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         key={key}
                         className={`
                           border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                          rounded-md px-2 py-1 m-1 text-sm
+                          m-1 rounded-md px-2 py-1 text-sm
                           ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                           ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}`
                         }
@@ -108,12 +108,12 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="flex items-center mb-4">
+        <div className="mb-4 flex items-center">
           <input
             id='x-log-checkbox'
             type="checkbox"
             value=""
-            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
             onChange={() => setXLogTransform(!xLogTransform)}
           />
           <label htmlFor="x-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
@@ -126,7 +126,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         key={key}
                         className={`
                           border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                          rounded-md px-2 py-1 m-1 text-sm
+                          m-1 rounded-md px-2 py-1 text-sm
                           ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                           ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}`
                         }
@@ -141,12 +141,12 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="flex items-center mb-4">
+        <div className="mb-4 flex items-center">
           <input
             id="y-log-checkbox"
             type="checkbox"
             value=""
-            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
             onChange={() => setYLogTransform(!yLogTransform)}
           />
           <label htmlFor="y-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
