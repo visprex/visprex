@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@react-spring/web": "^9.7.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -13,6 +14,7 @@
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "d3": "^7.8.5",
+    "heroicons": "^2.0.18",
     "lodash": "^4.17.21",
     "mixpanel-browser": "^2.47.0",
     "papaparse": "^5.4.1",
