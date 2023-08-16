@@ -26,12 +26,12 @@ export default function App() {
       icon: ChartBarIcon,
     },
     {
-      name: "Scatterplot",
+      name: "Scatter Plot",
       href: "#scatterplot",
       icon: CubeTransparentIcon,
     },
     {
-      name: "CorrelationMatrix",
+      name: "Correlation Matrix",
       href: "#correlationmatrix",
       icon: CalculatorIcon,
     },
