@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { NumberSchema } from "../../utils/schema";
+import { transformOps } from "../../utils/transform";
 
 interface ScatterplotProps {
     width: number;
@@ -14,23 +15,27 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   const scatterRef = useRef<SVGSVGElement>(null);
   const [xAxisIdx, setXAxisIdx] = useState(0);
   const [yAxisIdx, setYAxisIdx] = useState(1);
-  const [xLogTransform, setXLogTransform] = useState(false);
-  const [yLogTransform, setYLogTransform] = useState(false);
+
+  const [xTransform, setXTransform] = useState("none");
+  const [yTransform, setYTransform] = useState("none");
+  
+  const [errorMessageX, setErrorMessageX] = useState("");
+  const [errorMessageY, setErrorMessageY] = useState("");
 
   useEffect(() => {  
     const svg = d3.select(scatterRef.current!);
     const margin = { top: 20, right: 30, bottom: 40, left: 50 };
     const boundsWidth = width - margin.left - margin.right;
     const boundsHeight = height - margin.top - margin.bottom;
-
+    
     const domain = {
       x: [
-        xLogTransform ? Math.log(schema[xAxisIdx].range.min+1) : schema[xAxisIdx].range.min,
-        xLogTransform ? Math.log(schema[xAxisIdx].range.max+1) : schema[xAxisIdx].range.max
+        transformOps[xTransform](schema[xAxisIdx].range.min),
+        transformOps[xTransform](schema[xAxisIdx].range.max)
       ],
       y: [
-        yLogTransform ? Math.log(schema[yAxisIdx].range.min+1) : schema[yAxisIdx].range.min,
-        yLogTransform ? Math.log(schema[yAxisIdx].range.max+1) : schema[yAxisIdx].range.max
+        transformOps[yTransform](schema[yAxisIdx].range.min),
+        transformOps[yTransform](schema[yAxisIdx].range.max)
       ]
     };
     const xScale = d3.scaleLinear()
@@ -60,8 +65,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
     const data = matrix[xAxisIdx].map((xValue, index) => ({
         name: index,
-        x: xLogTransform ? Math.log(xValue+1) : xValue,
-        y: yLogTransform ? Math.log(matrix[yAxisIdx][index]+1) : matrix[yAxisIdx][index]
+        x: transformOps[xTransform](xValue),
+        y: transformOps[yTransform](matrix[yAxisIdx][index])
       })
     );
 
@@ -75,10 +80,11 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
       .attr('r', 5)
       .attr('cx', d => xScale(d.x))
       .attr('cy', d => yScale(d.y));
-  }, [xAxisIdx, yAxisIdx, xLogTransform, yLogTransform]);
+  }, [xAxisIdx, yAxisIdx, xTransform, yTransform]);
 
   return (
-    <div className='mx-auto'>
+    <div id='scatterplot' className='mx-auto'>
+        <svg ref={scatterRef} width={width} height={height}></svg>
         <div key='x'>
             <span>X:</span>
             {
@@ -93,7 +99,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         }
                         onClick={() => {
                             setXAxisIdx(idx)
-                            setXLogTransform(false)
+                            setXTransform("none")
                           }
                       }
                     >
@@ -102,17 +108,56 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="mb-4 items-center">
-          <input
-            id='x-log-checkbox'
-            type="checkbox"
-            value=""
-            className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
-            onChange={() => setXLogTransform(!xLogTransform)}
-          />
-          <label htmlFor="x-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
-        </div>
         <div>
+          <span>Transform:</span>
+          {
+              ['none', 'log10(x)', 'ln(x)'].map((key) => (
+                <button
+                  key={key}
+                  className={`
+                    border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                    m-1 rounded-md px-2 py-1 text-sm
+                    ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                    ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
+                  }
+                  onClick={() => {
+                    const schemaItem = schema[xAxisIdx];
+                    switch (key) {
+                      case "none":
+                        setXTransform("none");
+                        setErrorMessageX("");
+                        break;
+                      case "ln(x)":
+                        if (schemaItem.range.min <= 0) {
+                          setErrorMessageX("Error: All numbers must be positive for ln(x) transform.");
+                          setXTransform('none');
+                          return;
+                        }
+                        setXTransform("ln(x)");
+                        setErrorMessageX("");
+                        break;
+                      case "log10(x)":
+                        if (schemaItem.range.min <= 0) {
+                          setErrorMessageX("Error: All numbers must be positive for log10(x) transform.");
+                          setXTransform('none');
+                          return;
+                        }
+                        setXTransform("log10(x)");
+                        setErrorMessageX("");
+                        break;
+                      default:
+                        break;
+                    }
+                  }}
+                >
+                  {key}
+                </button>
+              )
+            )
+          }
+          <span className="ml-2 text-red-400">{errorMessageX}</span>
+        </div>
+        <div key='y'>
             <span>Y: </span>
             {
                 keys.map((key: string, idx: number ) =>
@@ -126,7 +171,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         }
                         onClick={() => {
                           setYAxisIdx(idx)
-                          setYLogTransform(false)
+                          setYTransform('none')
                         }
                       }
                     >
@@ -135,17 +180,55 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 )
             }
         </div>
-        <div className="mb-4 items-center">
-          <input
-            id="y-log-checkbox"
-            type="checkbox"
-            value=""
-            className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
-            onChange={() => setYLogTransform(!yLogTransform)}
-          />
-          <label htmlFor="y-log-checkbox" className="ml-2 text-sm text-gray-500">Transform: log(x+1)</label>
+        <div>
+          <span>Transform:</span>
+          {
+              ['none', 'log10(x)', 'ln(x)'].map((key) => (
+                <button
+                  key={key}
+                  className={`
+                    border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                    m-1 rounded-md px-2 py-1 text-sm
+                    ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                    ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
+                  }
+                  onClick={() => {
+                    const schemaItem = schema[yAxisIdx];
+                    switch (key) {
+                      case "none":
+                        setYTransform("none");
+                        setErrorMessageY("");
+                        break;
+                      case "ln(x)":
+                        if (schemaItem.range.min <= 0) {
+                          setErrorMessageY("Error: All numbers must be positive for ln(x) transform.");
+                          setYTransform('none');
+                          return;
+                        }
+                        setYTransform("ln(x)");
+                        setErrorMessageY("");
+                        break;
+                      case "log10(x)":
+                        if (schemaItem.range.min <= 0) {
+                          setErrorMessageY("Error: All numbers must be positive for log10(x) transform.");
+                          setYTransform('none');
+                          return;
+                        }
+                        setYTransform("log10(x)");
+                        setErrorMessageY("");
+                        break;
+                      default:
+                        break;
+                    }
+                  }}
+                >
+                  {key}
+                </button>
+              )
+            )
+          }
+          <span className="ml-2 text-red-400">{errorMessageY}</span>
         </div>
-        <svg ref={scatterRef} width={width} height={height}></svg>       
     </div>
   );
 };
