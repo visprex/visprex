@@ -78,7 +78,7 @@ export default function App() {
                   tab.name === currentTab
                     ? "border-indigo-500 text-indigo-600"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                  "group inline-flex items-center border-b-2 px-1 py-4 text-sm font-medium"
+                  "group inline-flex items-center border-b-2 px-1 py-2 text-sm font-medium"
                 )}
                 aria-current={tab.name === currentTab ? "page" : undefined}
                 onClick={() => handleTabClick(tab.name)}

@@ -31,5 +31,9 @@ export const datasets = [
     {
         name: "youtube-stats.csv",
         description: "",
+    },
+    {
+        name: "nba-stats-2022-23.csv",
+        description: "",
     }
 ]
