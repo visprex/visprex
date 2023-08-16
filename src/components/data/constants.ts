@@ -24,4 +24,12 @@ export const datasets = [
         name: "maple-syrup.csv",
         description: "",
     },
+    {
+        name: "world-dataset-2023.csv",
+        description: "",
+    },
+    {
+        name: "youtube-stats.csv",
+        description: "",
+    }
 ]
