@@ -100,8 +100,8 @@ export default function App() {
         <div>
           {currentTab === 'Datasets' && <Dataloader onDataParsed={handleDataParsed}/>}
           {currentTab === 'Histogram' && (schema.length > 0 ? <Histogram height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
-          {currentTab === 'Scatterplot' && (schema.length > 0 ? <Scatterplot height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
-          {currentTab === 'CorrelationMatrix' && (schema.length > 0 ? <CorrelationMatrix height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
+          {currentTab === 'Scatter Plot' && (schema.length > 0 ? <Scatterplot height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
+          {currentTab === 'Correlation Matrix' && (schema.length > 0 ? <CorrelationMatrix height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
         </div>
     </div>
   </div>
