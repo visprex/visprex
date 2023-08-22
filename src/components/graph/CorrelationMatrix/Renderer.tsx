@@ -91,7 +91,6 @@ const colorScale = d3.scaleLinear<string>()
     if (!x) {
       return null;
     }
-
     return (
       <text
         key={i}
@@ -101,7 +100,27 @@ const colorScale = d3.scaleLinear<string>()
         dominantBaseline="middle"
         fontSize={10}
       >
-        {name}
+        {i}
+      </text>
+    );
+  });
+
+  const yLabels = allYGroups.map((name, i) => {
+    const y = yScale(name);
+
+    if (!y) {
+      return null;
+    }
+    return (
+      <text
+        key={i}
+        x={-15}
+        y={y + yScale.bandwidth() / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={10}
+      >
+        {i}
       </text>
     );
   });
@@ -115,6 +134,7 @@ const colorScale = d3.scaleLinear<string>()
       >
         {allShapes}
         {xLabels}
+        {yLabels}
       </g>
     </svg>
   );
