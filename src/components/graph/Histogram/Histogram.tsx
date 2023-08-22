@@ -148,7 +148,9 @@ export const Histogram = ({
                     border ${currentTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                     m-1 rounded-md px-2 py-1 text-sm
                     ${currentTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
-                    ${currentTransform === key ? 'opacity-100' : 'opacity-70'}`
+                    ${currentTransform === key ? 'opacity-100' : 'opacity-70'}
+                    ${currentDatatype === DataType.Categorical && key !== TransformType.None ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50'  : 'cursor-pointer'}
+                    `
                   }
                   onClick={() => handleTransform(key)}
                 >
