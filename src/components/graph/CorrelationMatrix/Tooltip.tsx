@@ -23,7 +23,7 @@ export const Tooltip = ({ interactionData, width, height }: TooltipProps) => {
       }}
     >
       <div
-        className="absolute bg-black bg-opacity-80 rounded-md text-white text-sm px-4 py-2 ml-15 transform -translate-y-1/2"
+        className="absolute -translate-y-1/2 rounded-md bg-black px-4 py-2 text-sm text-white opacity-80"
         style={{
           position: "absolute",
           left: interactionData.xPos,

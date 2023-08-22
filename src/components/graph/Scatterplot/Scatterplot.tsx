@@ -173,7 +173,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   return (
     <div id='scatterplot' className='mx-auto'>
-      <div className="my-5 relative">
+      <div className="relative my-5">
           <svg width={width} height={height}>
             <g
               width={boundsWidth}
@@ -218,7 +218,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         m-1 rounded-md px-2 py-1 text-sm
                         ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                         ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                        ${schema[idx].type === DataType.Categorical ? 'bg-gray-500 opacity-100 border-gray-200 text-white' : ''}`
+                        ${schema[idx].type === DataType.Categorical ? 'border-gray-200 bg-gray-500 text-white opacity-100' : ''}`
                       }
                       onClick={() => {
                           setXAxisIdx(idx)
@@ -264,7 +264,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                         m-1 rounded-md px-2 py-1 text-sm
                         ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                         ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
-                        ${schema[idx].type === DataType.Categorical ? 'bg-gray-500 opacity-100 border-gray-200 text-white' : ''}`
+                        ${schema[idx].type === DataType.Categorical ? 'border-gray-200 bg-gray-500 text-white opacity-100' : ''}`
                       }
                       disabled={schema[xAxisIdx].type === 'categorical'}
                       onClick={() => {

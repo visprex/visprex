@@ -18,7 +18,7 @@ export const Tooltip = ({ interactionData }: TooltipProps) => {
 
   return (
     <div
-      className="absolute bg-black bg-opacity-80 rounded-md text-white text-xs px-4 py-2 ml-15 transform -translate-y-1/2"
+      className="absolute -translate-y-1/2 rounded-md bg-black px-4 py-2 text-xs text-white opacity-80"
       style={{
         left: interactionData.xPos,
         top: interactionData.yPos,

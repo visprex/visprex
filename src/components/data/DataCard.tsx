@@ -10,8 +10,8 @@ interface DataCardProps {
 const DataCard: React.FC<DataCardProps> = ({ schema }) => {
   return (
     <div className="mt-5 overflow-x-auto">
-      <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-s text-gray-700 bg-gray-50">
+      <table className="w-full text-left text-sm text-gray-500">
+          <thead className="bg-gray-50 text-gray-700">
               <tr>
                 <th>Index</th>
                 {schema.map((schemaItem) => {
@@ -24,7 +24,7 @@ const DataCard: React.FC<DataCardProps> = ({ schema }) => {
               </tr>
           </thead>
           <tbody>
-              <tr className="bg-white border-b">
+              <tr className="border-b bg-white">
                   <th className="text-gray-700">Feature</th>
                   {schema.map((schemaItem) => {
                     return (
@@ -34,7 +34,7 @@ const DataCard: React.FC<DataCardProps> = ({ schema }) => {
                     );
                   })}
               </tr>
-              <tr className="bg-white border-b">
+              <tr className="border-b bg-white">
                   <th className="text-gray-700">DataType</th>
                   {schema.map((schemaItem) => {
                     return (

@@ -43,8 +43,8 @@ export const CorrelationMatrix = ({ width, height, matrix, schema, keys } : Corr
       />
       <Tooltip interactionData={hoveredCell} width={width} height={height} />
       <div className="mt-5 overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <table className="w-full text-left text-sm text-gray-500">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-700">
                   <tr>
                     {schema.map((schemaItem) => {
                       return (
@@ -56,7 +56,7 @@ export const CorrelationMatrix = ({ width, height, matrix, schema, keys } : Corr
                   </tr>
               </thead>
               <tbody>
-                  <tr className="bg-white border-b">
+                  <tr className="border-b bg-white">
                       {schema.map((schemaItem) => {
                         return (
                           <td scope="col" className="px-6 py-3" key={schemaItem.index}>
