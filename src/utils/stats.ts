@@ -1,4 +1,4 @@
-import { NumberSchema } from './schema';
+import { Schema, NumberSchema, DataType } from './schema';
 
 export type Correlation = {
     x: string,
@@ -6,7 +6,7 @@ export type Correlation = {
     coef: number,
 };
 
-export function calculateCorrelations(matrix: any[][], schema: NumberSchema[]): Correlation[] {
+export function calculateCorrelations(matrix: any[][], schema: Schema[]): Correlation[] {
     const nCols = matrix.length;
     const nRows = matrix[0].length;
     const correlations: Correlation[] = [];
@@ -15,8 +15,8 @@ export function calculateCorrelations(matrix: any[][], schema: NumberSchema[]): 
     for (let col = 0; col < nCols; col++) {
         let sum = 0;
         for (let row = 0; row < nRows; row++) {
-            if (typeof matrix[col][row] === 'number') {
-                const diff = matrix[col][row] - schema[col].mean;
+            if (typeof matrix[col][row] === DataType.Number) {
+                const diff = matrix[col][row] - (schema[col] as NumberSchema).mean;
                 sum += diff * diff;
             }
         }
@@ -28,9 +28,9 @@ export function calculateCorrelations(matrix: any[][], schema: NumberSchema[]): 
             if (colX !== colY) {
                 let covariance = 0;
                 for (let row = 0; row < nRows; row++) {
-                    if (typeof matrix[colX][row] === 'number' && typeof matrix[colY][row] === 'number') {
-                        const diffX = matrix[colX][row] - schema[colX].mean;
-                        const diffY = matrix[colY][row] - schema[colY].mean;
+                    if (typeof matrix[colX][row] === DataType.Number && typeof matrix[colY][row] === DataType.Number) {
+                        const diffX = matrix[colX][row] - (schema[colX] as NumberSchema).mean;
+                        const diffY = matrix[colY][row] - (schema[colY] as NumberSchema).mean;
                         covariance += diffX * diffY;
                     }
                 }

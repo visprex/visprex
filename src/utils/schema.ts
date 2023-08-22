@@ -1,6 +1,12 @@
 import _ from 'lodash';
 
+export enum DataType {
+  Number = 'number',
+  Categorical = 'categorical',
+}
+
 export type NumberSchema = {
+  type: DataType.Number,
   index: number,
   key: string
   range: {
@@ -10,16 +16,39 @@ export type NumberSchema = {
   mean: number
 }
 
-export function inferNumberSchema(keys: string[], matrix: number[][]): NumberSchema[] {
- return keys.map((key: string, index: number) => (
-    {
-      index,
-      key,
-      range: {
-        min: _.min(matrix[index]),
-        max: _.max(matrix[index]),
-      },
-      mean: _.mean(matrix[index])
-    } as NumberSchema
-  ))
+export type CategoricalSchema = {
+  type: DataType.Categorical,
+  index: number,
+  key: string,
+  frequencies: {
+    [key: string]: number
+  }
+}
+
+export type Schema = NumberSchema | CategoricalSchema;
+
+export function inferSchema(keys: string[], matrix: unknown[][]): Schema[] {
+ return keys.map((key: string, index: number) => {
+    let schema: Schema;  
+    const mean = _.mean(matrix[index])
+    isNaN(mean) ? 
+      schema = {
+        type: DataType.Categorical,
+        index,
+        key,
+        frequencies: _.countBy(matrix[index].map((v) => (v === null || v === undefined) ? "N/A" : v))
+      } as CategoricalSchema
+    :
+      schema = {
+        type: DataType.Number,
+        index,
+        key,
+        range: {
+          min: _.min(matrix[index]),
+          max: _.max(matrix[index]),
+        },
+        mean
+      } as NumberSchema
+    return schema
+ })
 }

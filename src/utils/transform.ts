@@ -1,3 +1,10 @@
+export enum TransformType {
+    None = "none",
+    Centering = "mean centering",
+    Log10 = "log10(x)",
+    Ln = "ln(x)",
+}
+
 export function transpose<T>(matrix: T[][]): T[][] {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
 }
