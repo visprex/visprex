@@ -35,7 +35,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   const [hovered, setHovered] = useState<InteractionData | null>(null);
 
-  const margin = { top: 10, right: 50, bottom: 60, left: 60 };
+  const margin = { top: 30, right: 80, bottom: 30, left: 30 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
   
