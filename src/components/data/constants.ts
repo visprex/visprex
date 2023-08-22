@@ -5,19 +5,15 @@ export const datasets = [
         description: "",
     },
     {
-        name: "winequality-red.csv",
+        name: "house-price.csv",
         description: "",
-    },  
+    },
     {
-        name: "boston-housing.csv",
+        name: "winequality-red.csv",
         description: "",
     },
     {
         name: "cars.csv",
-        description: "",
-    },
-    {
-        name: "euro-economy-2022.csv",
         description: "",
     },
     {
@@ -35,5 +31,18 @@ export const datasets = [
     {
         name: "nba-stats-2022-23.csv",
         description: "",
-    }
+    },
+    {
+        name: "FPL-2022-23.csv",
+        description: "",
+    },
+
+    {
+        name: "usa-medical-cost.csv",
+        description: "",
+    },
+    {
+        name: "human-resources-data.csv",
+        description: "",
+    },
 ]

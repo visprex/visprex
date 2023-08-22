@@ -56,7 +56,6 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
         </label>
       </div>
       <div className="my-3 h-auto">
-          <span className='mx-auto text-gray-600'>Example datasets:</span>
           {
             datasets.map((dataset, idx) => (
               <button
