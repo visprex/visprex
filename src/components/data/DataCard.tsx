@@ -39,7 +39,7 @@ const DataCard: React.FC<DataCardProps> = ({ schema }) => {
                   {schema.map((schemaItem) => {
                     return (
                       <td scope="col" className="px-6 py-3" key={schemaItem.index}>
-                        {schemaItem.type}
+                        {schemaItem.type === 'number' ? 'Numerical' : 'Categorical'}
                       </td>
                     );
                   })}

@@ -1,5 +1,5 @@
 export function convertNumberNotation(n: number): string {
-    if (n < 1000) {
+    if (n < 3000) {
         return n.toString();
     } else if (n < 1000000) {
         return (n / 1000).toFixed(1) + "K";
