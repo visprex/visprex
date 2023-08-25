@@ -15,6 +15,7 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
         complete: onDataParsed,
         header: true,
         dynamicTyping: true,
+        skipEmptyLines: true
       }
     ), [onDataParsed]
   };
