@@ -1,3 +1,3 @@
 # Visprex
 https://visprex.com
-Visualise, preprocess, and export your CSV files
+Visualise your CSV files without sending your data anywhere
