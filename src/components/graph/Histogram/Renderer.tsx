@@ -79,7 +79,6 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
             .attr("transform", "rotate(-45)")
             .attr("font-size", "9px")
     }
-
     const yAxisGenerator = d3.axisLeft(yScale);
     svgElement
         .append("g")
@@ -103,20 +102,40 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
   });
 
   return (
-    <svg width={width} height={height}>
-      <g
-        width={boundsWidth}
-        height={boundsHeight}
-        transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
-      >
-        {allRects}
-      </g>
-      <g
-        width={boundsWidth}
-        height={boundsHeight}
-        ref={histRef}
-        transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
-      />
-    </svg>
+    datatype === DataType.Categorical && Object.keys(data).length > 100 ?
+      <svg width={width} height={height}>
+        <g
+          width={boundsWidth}
+          height={boundsHeight}
+          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+        >
+          <text
+            x={boundsWidth / 2}
+            y={boundsHeight / 2}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            fontSize="16px"
+            fill="gray"
+          >
+            Unable to display all the histogram bins. There are {Object.keys(data).length} unique values.
+          </text>
+        </g>
+      </svg>
+    :
+      <svg width={width} height={height}>
+        <g
+          width={boundsWidth}
+          height={boundsHeight}
+          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+        >
+          {allRects}
+        </g>
+        <g
+          width={boundsWidth}
+          height={boundsHeight}
+          ref={histRef}
+          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+        />
+      </svg>
   );
 };
