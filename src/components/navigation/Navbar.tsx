@@ -10,7 +10,7 @@ const NavBar: React.FC<NavBarProps> = () => {
           <a href="/" className="mx-auto flex h-7 flex-col items-center">
             <img
               src="/logo.png"
-              className="mr-3 h-auto w-auto"
+              className="mr-3 max-h-full"
               alt="Visprex Logo"
             />
           </a>
