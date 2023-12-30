@@ -46,7 +46,7 @@ name: Build and Deploy to Cloud Run
 
 on:
   push:
-    branches: [ "KengoA/master" ]
+    branches: [ "master" ]
 
 env:
   PROJECT_ID: visprex
