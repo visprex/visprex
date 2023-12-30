@@ -1,6 +1,4 @@
-import React, { useState, useCallback } from 'react';
-import Papa from 'papaparse';
-import { bucketURL, datasets } from './constants';
+import React from 'react';
 import { Schema } from '../../utils/schema';
 
 interface DataCardProps {

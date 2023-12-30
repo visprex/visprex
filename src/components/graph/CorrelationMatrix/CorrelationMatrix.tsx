@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Schema, DataType, NumberSchema } from "../../../utils/schema";
+import { Schema } from "../../../utils/schema";
 import { calculateCorrelations, Correlation } from '../../../utils/stats';
 import { Tooltip } from './Tooltip';
 import { Renderer } from './Renderer';
@@ -21,7 +21,7 @@ export type InteractionData = {
   value: number;
 };
 
-export const CorrelationMatrix = ({ width, height, matrix, schema, keys } : CorrelationMatrixProps) => {
+export const CorrelationMatrix = ({ width, height, matrix, schema } : CorrelationMatrixProps) => {
   const [corr, setCorr] = useState<Correlation[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

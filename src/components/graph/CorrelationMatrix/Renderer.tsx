@@ -70,7 +70,7 @@ const colorScale = d3.scaleLinear<string>()
         fill={d.coef ? colorScale(d.coef): "gray"}
         rx={5}
         stroke={"white"}
-        onMouseEnter={(e) => {
+        onMouseEnter={() => {
           setHoveredCell({
             xLabel: d.x,
             yLabel: d.y,

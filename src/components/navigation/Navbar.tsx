@@ -4,7 +4,7 @@ import logo from './logo.svg';
 interface NavBarProps {
 }
 
-const NavBar: React.FC<NavBarProps> = (props: NavBarProps) => {
+const NavBar: React.FC<NavBarProps> = () => {
   return (
     <div className="w-full">
         <nav className="border-gray-700 bg-gray-800">

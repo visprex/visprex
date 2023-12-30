@@ -1,6 +1,6 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Schema, NumberSchema, CategoricalSchema, DataType } from "../../../utils/schema";
+import { Schema, NumberSchema, DataType } from "../../../utils/schema";
 import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
