@@ -30,7 +30,7 @@ export const Renderer = ({
       .range([0, boundsWidth])
       .domain(allXGroups)
       .padding(0.01);
-  }, [data, width]);
+  }, [allXGroups, boundsWidth]);
 
   const yScale = useMemo(() => {
     return d3
@@ -38,7 +38,7 @@ export const Renderer = ({
       .range([0, boundsHeight])
       .domain(allYGroups)
       .padding(0.01);
-  }, [data, height]);
+  }, [allYGroups, boundsHeight]);
 
 const colorScale = d3.scaleLinear<string>()
     .domain([-1, 0, 1])

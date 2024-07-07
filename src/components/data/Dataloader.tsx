@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import { bucketURL, datasets } from './constants';
 
 interface DataloaderProps {
-  onDataParsed: (data: Papa.ParseResult<any>) => void;
+  onDataParsed: (data: Papa.ParseResult<never[]>) => void;
 }
 
 const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {

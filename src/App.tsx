@@ -39,11 +39,11 @@ export default function App() {
   ];
 
   const [currentTab, setCurrentTab] = useState("Datasets");
-  const [matrix, setMatrix] = useState<any[][]>([])
+  const [matrix, setMatrix] = useState<unknown[][]>([])
   const [keys, setKeys] = useState<string[]>([])
   const [schema, setSchema] = useState<Schema[]>([])
 
-  const handleDataParsed = (parsed: Papa.ParseResult<any>) => {
+  const handleDataParsed = (parsed: Papa.ParseResult<unknown[]>) => {
     setKeys(Object.keys(parsed.data[0]))
     setMatrix(transpose(parsed.data.map(Object.values)))
   };

@@ -8,7 +8,7 @@ const BUTTONS_HEIGHT = 50;
 type HistogramProps = {
   width: number;
   height: number;
-  matrix: any[][];
+  matrix: unknown[][];
   schema: Schema[],
   keys: string[]
 };
@@ -31,7 +31,7 @@ export const Histogram = ({
   let initialCategoricalData: {[key: string]:number};
 
   if (firstSchemaItem.type === DataType.Number) {
-    initialNumberData = matrix[0]
+    initialNumberData = matrix[0].map((d) => d as number)
     initialCategoricalData = {}
   } else {
     initialNumberData = []
@@ -54,7 +54,7 @@ export const Histogram = ({
     const schemaItem = schema[idx];
     if (schemaItem.type === DataType.Number) {
       setCurrentDatatype(DataType.Number);
-      setSelectedNumberData(matrix[idx]);
+      setSelectedNumberData(matrix[idx] as number[]);
       setCurrentDomain([schemaItem.range.min-1, schemaItem.range.max+1]);
     } else {
       setCurrentDatatype(DataType.Categorical);
@@ -75,7 +75,7 @@ export const Histogram = ({
       }
       switch (key) {
         case TransformType.None:
-          setSelectedNumberData(currentData);
+          setSelectedNumberData(currentData as number[]);
           setCurrentDomain([schemaItem.range.min-1, schemaItem.range.max+1]);
           setErrorMessage("");
           break;
@@ -85,7 +85,7 @@ export const Histogram = ({
             setCurrentTransform(TransformType.None);
             return;
           }
-          setSelectedNumberData(logETransform(currentData));
+          setSelectedNumberData(logETransform(currentData as number[]));
           setCurrentDomain([Math.log(schemaItem.range.min), Math.log(schemaItem.range.max)]);
           setErrorMessage("");
           break;
@@ -95,12 +95,12 @@ export const Histogram = ({
             setCurrentTransform(TransformType.None);
             return;
           }
-          setSelectedNumberData(log10Transform(currentData));
+          setSelectedNumberData(log10Transform(currentData as number[]));
           setCurrentDomain([Math.log10(schemaItem.range.min), Math.log10(schemaItem.range.max)]);
           setErrorMessage("");
           break;
         case TransformType.Centering:
-          setSelectedNumberData(center(currentData, schemaItem.mean));
+          setSelectedNumberData(center(currentData as number[], schemaItem.mean));
           setCurrentDomain([schemaItem.range.min-schemaItem.mean, schemaItem.range.max-schemaItem.mean]);
           setErrorMessage("");
           break;

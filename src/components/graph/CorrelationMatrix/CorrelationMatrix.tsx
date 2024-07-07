@@ -8,7 +8,7 @@ import { Renderer } from './Renderer';
 interface CorrelationMatrixProps {
     width: number;
     height: number;
-    matrix: any[][];
+    matrix: unknown[][];
     schema: Schema[],
     keys: string[]
 }
@@ -28,7 +28,7 @@ export const CorrelationMatrix = ({ width, height, matrix, schema } : Correlatio
   useEffect(() => {
     setCorr(calculateCorrelations(matrix, schema)),
     setIsLoading(false);
-  }, []);
+  }, [matrix, schema]);
 
   const [hoveredCell, setHoveredCell] = useState<InteractionData | null>(null);
 

@@ -8,7 +8,6 @@ type AxisBottomProps = {
   height: number;
 };
 
-// tick length
 const TICK_LENGTH = 10;
 
 export const AxisBottom = ({
@@ -26,7 +25,7 @@ export const AxisBottom = ({
       value,
       xOffset: xScale(value),
     }));
-  }, [xScale]);
+  }, [pixelsPerTick, range, xScale]);
 
   return (
     <>
