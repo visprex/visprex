@@ -33,7 +33,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
 
   const xScale = useMemo(() => {
     return d3.scaleLinear().domain(domain).range([10, boundsWidth]);
-  }, [width, domain, datatype]);
+  }, [domain, boundsWidth]);
 
   const buckets = useMemo(() => {
     if (datatype === DataType.Categorical) {
@@ -59,7 +59,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
         max = Math.max(...Object.values(data)) :
         max = Math.max(...buckets.map((bucket) => bucket?.length))
     return d3.scaleLinear().range([boundsHeight, 0]).domain([0, max]).nice();
-  }, [data, height, boundsHeight, boundsWidth, datatype]);
+  }, [datatype, data, buckets, boundsHeight]);
 
   useEffect(() => {
     const svgElement = d3.select(histRef.current);
@@ -83,7 +83,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
     svgElement
         .append("g")
         .call(yAxisGenerator);
-  }, [xScale, yScale, xLabelScale, boundsHeight, datatype]);
+  }, [xScale, yScale, xLabelScale, boundsHeight, datatype, data]);
 
   const allRects = buckets.map((bucket, i) => {
     const { x0, x1 } = bucket;

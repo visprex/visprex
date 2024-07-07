@@ -15,7 +15,7 @@ enum ScatterTransformType {
 interface ScatterplotProps {
     width: number;
     height: number;
-    matrix: any[][];
+    matrix: unknown[][];
     schema: Schema[],
     keys: string[]
 }
@@ -143,8 +143,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   
   const data = matrix[xAxisIdx].map((xValue, index) => ({
       name: index,
-      x: transformOps[xTransform](xValue),
-      y: transformOps[yTransform](matrix[yAxisIdx][index])
+      x: transformOps[xTransform](xValue as number),
+      y: transformOps[yTransform](matrix[yAxisIdx][index] as number)
     })
   );
   const allShapes = data.map((d, i) => {
@@ -163,7 +163,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             xPos: xScale(d.x),
             yPos: yScale(d.y),
             keys,
-            values
+            values,
           })
         }
         onMouseLeave={() => setHovered(null)}

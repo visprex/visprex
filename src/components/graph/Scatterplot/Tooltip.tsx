@@ -4,7 +4,7 @@ export type InteractionData = {
   xPos: number;
   yPos: number;
   keys: string[];
-  values: any[];
+  values: unknown[];
 };
 
 type TooltipProps = {
@@ -30,7 +30,7 @@ export const Tooltip = ({ interactionData }: TooltipProps) => {
           <div key={key}>
             <b>{key}</b>
             <span>: </span>
-            <span>{typeof val === "number" ? convertNumberNotation(val) : val}</span>
+            <span>{typeof val === "number" ? convertNumberNotation(val as number) : val as never}</span>
           </div>
         )
       })}
