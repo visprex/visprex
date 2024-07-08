@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Histogram }  from './components/graph/Histogram/Histogram';
 import { Scatterplot }  from './components/graph/Scatterplot/Scatterplot';
 import { CorrelationMatrix }  from './components/graph/CorrelationMatrix/CorrelationMatrix';
-import { inferSchema, Schema } from './utils/schema';
+import { DataType, inferSchema, Schema } from './utils/schema';
 import { classNames } from './utils/classnames';
 import { transpose } from './utils/transform';
 import Navbar from './components/navigation/Navbar';
@@ -10,6 +10,7 @@ import NoDatasetSelected from './components/navigation/NoDatasetSelected';
 import Dataloader from './components/data/Dataloader';
 import DataCard from './components/data/DataCard';
 import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon } from '@heroicons/react/24/outline'
+import NotEnoughNumericalColumns from './components/navigation/NotEnoughNumericalColumns';
 
 export default function App() {
   const elementRef = useRef<HTMLDivElement | null>(null)
@@ -105,7 +106,15 @@ export default function App() {
             </>
           }
           {currentTab === 'Histogram' && (schema.length > 0 ? <Histogram height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
-          {currentTab === 'Scatter Plot' && (schema.length > 0 ? <Scatterplot height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
+          {currentTab === 'Scatter Plot' && 
+            (schema.length > 0 ?
+              schema.filter(s => s.type == DataType.Number).length > 1 ?
+                <Scatterplot height={450} width={width} matrix={matrix} keys={keys} schema={schema}/>
+                : <NotEnoughNumericalColumns/>
+            :
+              <NoDatasetSelected/>
+            )
+          }
           {currentTab === 'Correlation Matrix' && (schema.length > 0 ? <CorrelationMatrix height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
         </div>
     </div>

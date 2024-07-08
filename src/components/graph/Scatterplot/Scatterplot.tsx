@@ -5,6 +5,7 @@ import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
+import TooManyRows, { MAX_ROWS_TO_DISPLY } from '../../navigation/TooManyRows';
 
 enum ScatterTransformType {
   None = "none",
@@ -173,132 +174,137 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   return (
     <div id='scatterplot' className='mx-auto'>
-      <div className="relative my-5">
-          <svg width={width} height={height}>
-            <g
-              width={boundsWidth}
-              height={boundsHeight}
-              transform={`translate(${[margin.left, margin.top].join(",")})`}
-            >
-              <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
-              <g transform={`translate(0, ${boundsHeight})`}>
-                <AxisBottom
-                  xScale={xScale}
-                  pixelsPerTick={40}
+      {
+        allShapes.length > MAX_ROWS_TO_DISPLY ? <TooManyRows rows={allShapes.length} /> :
+        <>
+          <div className="relative my-5">
+              <svg width={width} height={height}>
+                <g
+                  width={boundsWidth}
                   height={boundsHeight}
-                />
-              </g>
-              {allShapes}
-            </g>
-          </svg>
-          <div
-            style={{
-              width: boundsWidth,
-              height: boundsHeight,
-              position: "absolute",
-              top: 0,
-              left: 0,
-              pointerEvents: "none",
-              marginLeft: margin.left,
-              marginTop: margin.top,
-            }}
-          >
-            <Tooltip interactionData={hovered} />
+                  transform={`translate(${[margin.left, margin.top].join(",")})`}
+                >
+                  <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
+                  <g transform={`translate(0, ${boundsHeight})`}>
+                    <AxisBottom
+                      xScale={xScale}
+                      pixelsPerTick={40}
+                      height={boundsHeight}
+                    />
+                  </g>
+                  {allShapes}
+                </g>
+              </svg>
+              <div
+                style={{
+                  width: boundsWidth,
+                  height: boundsHeight,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  pointerEvents: "none",
+                  marginLeft: margin.left,
+                  marginTop: margin.top,
+                }}
+              >
+                <Tooltip interactionData={hovered} />
+              </div>
           </div>
-      </div>
-      <div key='x'>
-          <span>X Axis:</span>
-          {
-              keys.map((key: string, idx: number ) =>
-                  <button
-                      key={key}
-                      disabled={schema[idx].type === DataType.Categorical}
-                      className={`
-                        border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                        m-1 rounded-md px-2 py-1 text-sm
-                        ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
-                        ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                        ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
-                      }
-                      onClick={() => {
-                          setXAxisIdx(idx)
-                          setXTransform(ScatterTransformType.None)
+          <div key='x'>
+              <span>X Axis:</span>
+              {
+                  keys.map((key: string, idx: number ) =>
+                      <button
+                          key={key}
+                          disabled={schema[idx].type === DataType.Categorical}
+                          className={`
+                            border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                            m-1 rounded-md px-2 py-1 text-sm
+                            ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                            ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
+                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
+                          }
+                          onClick={() => {
+                              setXAxisIdx(idx)
+                              setXTransform(ScatterTransformType.None)
+                            }
                         }
-                    }
-                  >
-                      {key}
-                  </button>
-              )
-          }
-      </div>
-      <div>
-        <span>Transform:</span>
-        {
-            [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
-              <button
-                key={key}
-                className={`
-                  border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                  m-1 rounded-md px-2 py-1 text-sm
-                  ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
-                  ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
-                }
-                disabled={schema[xAxisIdx].type === 'categorical'}
-                onClick={() => handleTransformX(key)}
-              >
-                {key}
-              </button>
-            )
-          )
-        }
-        <span className="ml-2 text-red-400">{errorMessageX}</span>
-      </div>
-      <div className="mt-4" key='y'>
-          <span>Y Axis: </span>
-          {
-              keys.map((key: string, idx: number ) =>
+                      >
+                          {key}
+                      </button>
+                  )
+              }
+          </div>
+          <div>
+            <span>Transform:</span>
+            {
+                [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
                   <button
-                      key={key}
-                      className={`
-                        border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                        m-1 rounded-md px-2 py-1 text-sm
-                        ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
-                        ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
-                        ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
-                      }
-                      disabled={schema[xAxisIdx].type === 'categorical'}
-                      onClick={() => {
-                        setYAxisIdx(idx)
-                        setYTransform(ScatterTransformType.None)
-                      }
+                    key={key}
+                    className={`
+                      border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                      m-1 rounded-md px-2 py-1 text-sm
+                      ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                      ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
+                    disabled={schema[xAxisIdx].type === 'categorical'}
+                    onClick={() => handleTransformX(key)}
                   >
-                      {key}
+                    {key}
                   </button>
+                )
               )
-          }
-      </div>
-      <div>
-        <span>Transform:</span>
-        {
-            [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
-              <button
-                key={key}
-                className={`
-                  border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                  m-1 rounded-md px-2 py-1 text-sm
-                  ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
-                  ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
-                }
-                onClick={() => handleTransformY(key)}
-              >
-                {key}
-              </button>
-            )
-          )
-        }
-        <span className="ml-2 text-red-400">{errorMessageY}</span>
-      </div>
+            }
+            <span className="ml-2 text-red-400">{errorMessageX}</span>
+          </div>
+          <div className="mt-4" key='y'>
+              <span>Y Axis: </span>
+              {
+                  keys.map((key: string, idx: number ) =>
+                      <button
+                          key={key}
+                          className={`
+                            border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                            m-1 rounded-md px-2 py-1 text-sm
+                            ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                            ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
+                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
+                          }
+                          disabled={schema[xAxisIdx].type === 'categorical'}
+                          onClick={() => {
+                            setYAxisIdx(idx)
+                            setYTransform(ScatterTransformType.None)
+                          }
+                        }
+                      >
+                          {key}
+                      </button>
+                  )
+              }
+          </div>
+          <div>
+            <span>Transform:</span>
+            {
+                [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
+                  <button
+                    key={key}
+                    className={`
+                      border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                      m-1 rounded-md px-2 py-1 text-sm
+                      ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                      ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
+                    }
+                    onClick={() => handleTransformY(key)}
+                  >
+                    {key}
+                  </button>
+                )
+              )
+            }
+            <span className="ml-2 text-red-400">{errorMessageY}</span>
+          </div>
+        </>
+      }
     </div>
   );
 };
