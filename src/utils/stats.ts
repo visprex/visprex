@@ -1,4 +1,4 @@
-import { Schema, NumberSchema, DataType } from './schema';
+import { Schema, NumberSchema, DataType, Value } from './schema';
 
 export type Correlation = {
     x: string,
@@ -6,7 +6,7 @@ export type Correlation = {
     coef: number,
 };
 
-export function calculateCorrelations(matrix: unknown[][], schema: Schema[]): Correlation[] {
+export function calculateCorrelations(matrix: Value[][], schema: Schema[]): Correlation[] {
     const nCols = matrix.length;
     const nRows = matrix[0].length;
     const correlations: Correlation[] = [];

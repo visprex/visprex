@@ -1,10 +1,12 @@
 import { convertNumberNotation } from "./utils";
+import { Value } from "../../../utils/schema";
+
 
 export type InteractionData = {
   xPos: number;
   yPos: number;
   keys: string[];
-  values: unknown[];
+  values: Value[];
 };
 
 type TooltipProps = {

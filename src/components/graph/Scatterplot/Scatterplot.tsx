@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Schema, NumberSchema, DataType } from "../../../utils/schema";
+import { Schema, NumberSchema, DataType, Value } from "../../../utils/schema";
+import { Filter, filterMatrix } from "../../../utils/filters";
 import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import TooManyRows, { MAX_ROWS_TO_DISPLY } from '../../navigation/TooManyRows';
+import FilterRemover from '../Filters/FilterRemover';
+import FilterSelector from '../Filters/FilterSelector';
 
 enum ScatterTransformType {
   None = "none",
@@ -16,7 +19,7 @@ enum ScatterTransformType {
 interface ScatterplotProps {
     width: number;
     height: number;
-    matrix: unknown[][];
+    matrix: Value[][];
     schema: Schema[],
     keys: string[]
 }
@@ -24,6 +27,8 @@ interface ScatterplotProps {
 export const Scatterplot = ({ width, height, matrix, schema, keys } : ScatterplotProps) => {
   const scatterRef = useRef<SVGSVGElement>(null);
   const numberSchema = schema.filter((schemaItem) => schemaItem.type === DataType.Number) as NumberSchema[];
+
+  const [filters, setFilters] = useState<Filter[]>([]);
 
   const [xAxisIdx, setXAxisIdx] = useState(numberSchema[0].index);
   const [yAxisIdx, setYAxisIdx] = useState(numberSchema[1].index);
@@ -39,6 +44,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   const margin = { top: 30, right: 80, bottom: 30, left: 30 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
+
+  const filteredMatrix = filterMatrix(matrix, filters, schema);
   
   function handleTransformX(key: string) {
     const schemaItem = schema[xAxisIdx];
@@ -106,6 +113,14 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
     }
   }
 
+  const handleAddFilter = (newFilter: Filter) => {
+    setFilters((prevFilters) => [...prevFilters, newFilter]);
+  };
+
+  const handleRemoveFilter = (index: number) => {
+    setFilters((prevFilters) => prevFilters.filter((_, i) => i !== index));
+  };
+
   const svg = d3.select(scatterRef.current!);
   const domain = {
     x: [
@@ -142,7 +157,16 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
     .attr('class', 'y-axis')
     .call(yAxis);
   
-  const data = matrix[xAxisIdx].map((xValue, index) => ({
+  if (filterMatrix(matrix, filters, schema).length === 0) {
+    return (
+      <>
+        <div>No data to display. Consider removing filters.</div>
+        {<FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />}
+      </>
+    );
+  }
+
+  const data = filteredMatrix[xAxisIdx].map((xValue, index) => ({
       name: index,
       x: transformOps[xTransform](xValue as number),
       y: transformOps[yTransform](matrix[yAxisIdx][index] as number)
@@ -303,9 +327,12 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             }
             <span className="ml-2 text-red-400">{errorMessageY}</span>
           </div>
+          <div>
+            <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
+            <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
+          </div>
         </>
       }
     </div>
   );
 };
-

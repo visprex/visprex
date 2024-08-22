@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Histogram }  from './components/graph/Histogram/Histogram';
 import { Scatterplot }  from './components/graph/Scatterplot/Scatterplot';
 import { CorrelationMatrix }  from './components/graph/CorrelationMatrix/CorrelationMatrix';
-import { DataType, inferSchema, Schema } from './utils/schema';
+import { DataType, inferSchema, Schema, Value } from './utils/schema';
 import { classNames } from './utils/classnames';
 import { transpose } from './utils/transform';
 import Navbar from './components/navigation/Navbar';
@@ -40,11 +40,11 @@ export default function App() {
   ];
 
   const [currentTab, setCurrentTab] = useState("Datasets");
-  const [matrix, setMatrix] = useState<unknown[][]>([])
+  const [matrix, setMatrix] = useState<Value[][]>([])
   const [keys, setKeys] = useState<string[]>([])
   const [schema, setSchema] = useState<Schema[]>([])
 
-  const handleDataParsed = (parsed: Papa.ParseResult<unknown[]>) => {
+  const handleDataParsed = (parsed: Papa.ParseResult<Value[]>) => {
     setKeys(Object.keys(parsed.data[0]))
     setMatrix(transpose(parsed.data.map(Object.values)))
   };
