@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../utils/schema";
 import { Filter, Operator, CategoricalFilter, NumberFilter } from "../../../utils/filters";
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 interface FilterSelectorProps {
   schema: Schema[];
@@ -35,17 +36,27 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
 
       setInputValue(defaultValue);
     }
+
     if (selectedSchema?.type === DataType.Categorical) {
       const categoricalSchema = selectedSchema as CategoricalSchema;
-      setInputValue(Object.keys(categoricalSchema.frequencies)[0]);
+      if (!inputValue || !Object.keys(categoricalSchema.frequencies).includes(inputValue as string)) {
+        setInputValue(Object.keys(categoricalSchema.frequencies)[0]);
+      }
     }
-  }, [selectedOperator, selectedSchema, selectedSchemaKey]);
+  }, [selectedOperator, selectedSchema, selectedSchemaKey, inputValue]);
 
   const handleSchemaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const key = e.target.value;
     setSelectedSchemaKey(key);
     setSelectedOperator(Operator.Equal);
-    setInputValue('');
+
+    const newSchema = schema.find((s) => s.key === key);
+    if (newSchema?.type === DataType.Categorical) {
+      const categoricalSchema = newSchema as CategoricalSchema;
+      setInputValue(Object.keys(categoricalSchema.frequencies)[0]);
+    } else {
+      setInputValue('');
+    }
   };
 
   const handleOperatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -73,27 +84,23 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
           operator: selectedOperator,
           value: inputValue as number,
         } as NumberFilter;
-
     onFilterChange(filter);
   };
 
   return (
-    <div>
-      <select value={selectedSchemaKey} onChange={handleSchemaChange}>
+    <div className='flex align-middle'>
+      <select className='border border-gray-300 rounded-md p-1' value={selectedSchemaKey} onChange={handleSchemaChange}>
         {schema.map((s) => (
           <option key={s.key} value={s.key}>
             {s.key}
           </option>
         ))}
       </select>
-
       <select value={selectedOperator} onChange={handleOperatorChange}>
         {selectedSchema?.type === DataType.Categorical ? (
           <>
             <option value={Operator.Equal}>{Operator.Equal}</option>
             <option value={Operator.NotEqual}>{Operator.NotEqual}</option>
-            <option value={Operator.Contains}>{Operator.Contains}</option>
-            <option value={Operator.NotContains}>{Operator.NotContains}</option>
           </>
         ) : (
           <>
@@ -106,9 +113,8 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
           </>
         )}
       </select>
-
       {selectedSchema?.type === DataType.Categorical ? (
-        <select value={inputValue as string} onChange={handleValueChange}>
+        <select className='border border-gray-300 rounded-md p-1' value={inputValue as string} onChange={handleValueChange}>
           {Object.keys((selectedSchema as CategoricalSchema).frequencies).map((freqKey) => (
             <option key={freqKey} value={freqKey}>
               {freqKey}
@@ -117,13 +123,13 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         </select>
       ) : (
         <input
+          className='border border-gray-300 rounded-md p-1'
           type="number"
           value={inputValue}
           onChange={handleValueChange}
         />
       )}
-
-      <button onClick={handleApplyFilter}>Add filter</button>
+      <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-3 h-5 w-5"/></button>
     </div>
   );
 };

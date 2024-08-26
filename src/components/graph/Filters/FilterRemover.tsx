@@ -1,6 +1,7 @@
 import React from 'react';
 import { Filter, CategoricalFilter, NumberFilter } from "../../../utils/filters";
 import { DataType } from "../../../utils/schema";
+import { MinusCircleIcon } from '@heroicons/react/24/outline';
 
 interface FilterRemoverProps {
   filters: Filter[];
@@ -18,18 +19,22 @@ const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }
   };
 
   return (
-    <div>
+    <div className='flex'>
+      <div className='bg-gray-100 border-r-1'>
       {filters.map((filter, index) => (
-        <div key={index} style={{ marginBottom: '8px' }}>
+        <div className='flex align-middle' key={index}>
           <span>
             {filter.schemaKey} {filter.operator} {displayFilterValue(filter)}
           </span>
-          <button onClick={() => onRemoveFilter(index)} style={{ marginLeft: '8px' }}>
-            Remove
+          <button onClick={() => onRemoveFilter(index)}>
+            <MinusCircleIcon className='h-5 w-5 ml-3 text-indigo-500'/>
           </button>
         </div>
       ))}
     </div>
+
+    </div>
+
   );
 };
 

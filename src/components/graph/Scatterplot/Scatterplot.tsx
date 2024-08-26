@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Schema, NumberSchema, DataType, Value } from "../../../utils/schema";
 import { Filter, filterMatrix } from "../../../utils/filters";
@@ -45,7 +45,11 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
-  const filteredMatrix = filterMatrix(matrix, filters, schema);
+  const [filteredMatrix, setFilteredMatrix] = useState<Value[][]>(matrix);
+
+  useEffect(() => {
+    setFilteredMatrix(filterMatrix(matrix, filters, schema));
+  }, [matrix, filters, schema]);
   
   function handleTransformX(key: string) {
     const schemaItem = schema[xAxisIdx];
@@ -169,11 +173,11 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   const data = filteredMatrix[xAxisIdx].map((xValue, index) => ({
       name: index,
       x: transformOps[xTransform](xValue as number),
-      y: transformOps[yTransform](matrix[yAxisIdx][index] as number)
+      y: transformOps[yTransform](filteredMatrix[yAxisIdx][index] as number)
     })
   );
   const allShapes = data.map((d, i) => {
-    const values = keys.map((key) => matrix[keys.indexOf(key)][i]);
+    const values = keys.map((key) =>filteredMatrix[keys.indexOf(key)][i]);
     return (
       <circle
         key={i}
@@ -328,7 +332,9 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className="ml-2 text-red-400">{errorMessageY}</span>
           </div>
           <div>
+            Add a filter:
             <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
+            Current filters:
             <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
           </div>
         </>

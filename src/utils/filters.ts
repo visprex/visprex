@@ -4,8 +4,6 @@ import { transpose } from "./transform";
 export enum Operator {
   Equal = "=",
   NotEqual = "!=",
-  Contains = "contains",
-  NotContains = "not contains",
   GreaterThan = ">",
   GreaterThanOrEqual = ">=",
   LessThan = "<",
@@ -34,10 +32,6 @@ function applyCategoricalFilter(value: string, filter: CategoricalFilter): boole
       return value === filter.value;
     case Operator.NotEqual:
       return value !== filter.value;
-    case Operator.Contains:
-      return value.includes(filter.value);
-    case Operator.NotContains:
-      return !value.includes(filter.value);
     default:
       return false;
   }
@@ -78,7 +72,7 @@ export function filterMatrix(matrix: Value[][], filters: Filter[], schema: Schem
         : applyNumberFilter(value as number, f as NumberFilter);
     });
   })
-  // Send an alert message saying this filter results in 0 results.
+  // TODO: Send an alert message saying this filter results in 0 results.
   if (filteredT.length === 0) {
     return matrix;
   }
