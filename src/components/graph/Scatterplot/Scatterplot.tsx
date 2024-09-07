@@ -38,6 +38,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   
   const [errorMessageX, setErrorMessageX] = useState("");
   const [errorMessageY, setErrorMessageY] = useState("");
+  const [errorMessageFilter, setErrorMessageFilter] = useState("");
+
 
   const [hovered, setHovered] = useState<InteractionData | null>(null);
 
@@ -118,7 +120,14 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   }
 
   const handleAddFilter = (newFilter: Filter) => {
-    setFilters((prevFilters) => [...prevFilters, newFilter]);
+    setFilters((prevFilters) => {
+      if (filterMatrix(matrix, [...prevFilters, newFilter], schema)[0].length === matrix[0].length) {
+        setErrorMessageFilter(`error: filter (${newFilter.schemaKey} ${newFilter.operator} ${newFilter.value}) results in empty rows.`);
+        return prevFilters;
+      }
+      setErrorMessageFilter("");
+      return [...prevFilters, newFilter]
+    });
   };
 
   const handleRemoveFilter = (index: number) => {
@@ -332,9 +341,10 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className="ml-2 text-red-400">{errorMessageY}</span>
           </div>
           <div>
-            Add a filter:
+            <span>Add a filter: </span>
             <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
-            Current filters:
+            {errorMessageFilter.length > 0 && <div className="text-red-400"><span>{errorMessageFilter}</span></div>}
+            <span>Current filters: </span>
             <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
           </div>
         </>

@@ -72,7 +72,6 @@ export function filterMatrix(matrix: Value[][], filters: Filter[], schema: Schem
         : applyNumberFilter(value as number, f as NumberFilter);
     });
   })
-  // TODO: Send an alert message saying this filter results in 0 results.
   if (filteredT.length === 0) {
     return matrix;
   }

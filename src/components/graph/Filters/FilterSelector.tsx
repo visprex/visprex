@@ -43,7 +43,8 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         setInputValue(Object.keys(categoricalSchema.frequencies)[0]);
       }
     }
-  }, [selectedOperator, selectedSchema, selectedSchemaKey, inputValue]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOperator, selectedSchema, selectedSchemaKey]);
 
   const handleSchemaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const key = e.target.value;
