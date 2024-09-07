@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Schema } from "../../../utils/schema";
+import { Schema, Value } from "../../../utils/schema";
 import { calculateCorrelations, Correlation } from '../../../utils/stats';
 import { Tooltip } from './Tooltip';
 import { Renderer } from './Renderer';
@@ -8,7 +8,7 @@ import { Renderer } from './Renderer';
 interface CorrelationMatrixProps {
     width: number;
     height: number;
-    matrix: unknown[][];
+    matrix: Value[][];
     schema: Schema[],
     keys: string[]
 }

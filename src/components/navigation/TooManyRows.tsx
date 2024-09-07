@@ -1,4 +1,4 @@
-export const MAX_ROWS_TO_DISPLY = 100000;
+export const MAX_ROWS_TO_DISPLY = 1000000;
 
 type TooManyRowsProps = {
     rows: number;

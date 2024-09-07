@@ -27,7 +27,9 @@ export type CategoricalSchema = {
 
 export type Schema = NumberSchema | CategoricalSchema;
 
-export function inferSchema(keys: string[], matrix: unknown[][]): Schema[] {
+export type Value = number | string;
+
+export function inferSchema(keys: string[], matrix: Value[][]): Schema[] {
  return keys.map((key: string, index: number) => {
     let schema: Schema;  
     const mean = _.mean(matrix[index])

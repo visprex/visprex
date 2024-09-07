@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Schema, NumberSchema, CategoricalSchema, DataType } from "../../../utils/schema";
+import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../utils/schema";
 import { logETransform, log10Transform, center, TransformType } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 
@@ -8,7 +8,7 @@ const BUTTONS_HEIGHT = 50;
 type HistogramProps = {
   width: number;
   height: number;
-  matrix: unknown[][];
+  matrix: Value[][];
   schema: Schema[],
   keys: string[]
 };
