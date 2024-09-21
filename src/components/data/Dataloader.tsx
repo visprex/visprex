@@ -78,6 +78,11 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
             ))
           }
         </div>
+        {/* display dataset details with description and reference */}
+        {datasetIdx !==null && <div className="text-sm text-gray-500">
+          <span className='mr-1'>{datasets[datasetIdx]?.description}</span>
+          <a href={datasets[datasetIdx]?.reference} target="_blank" rel="noreferrer" className="text-indigo-500">Reference</a>
+        </div>}
     </div>
     
   );
