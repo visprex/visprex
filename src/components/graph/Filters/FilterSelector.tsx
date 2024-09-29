@@ -130,7 +130,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
           onChange={handleValueChange}
         />
       )}
-      <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-3 h-5 w-5"/></button>
+      <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-2 h-6 w-6"/></button>
     </div>
   );
 };
