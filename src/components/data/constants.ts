@@ -6,33 +6,38 @@ export const datasets = [
         reference: "https://archive.ics.uci.edu/ml/datasets/iris",
     },
     {
-        name: "house-price.csv",
-        description: "Boston house price dataset.",
-        reference: "https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data",
-    },
-    {
         name: "winequality-red.csv",
-        description: "Wine quality dataset.",
+        description: "UCI Wine quality dataset (Cortez et al., 2009)",
         reference: "https://archive.ics.uci.edu/ml/datasets/wine+quality",
     },
     {
         name: "cars.csv",
-        description: "Cars dataset.",
+        description: "UCI Cars dataset (Schlimmer, 1987)",
         reference: "https://archive.ics.uci.edu/ml/datasets/automobile",
     },
     {
+        name: "housing.csv",
+        description: "Kaggle Housing Prices Dataset.",
+        reference: "https://www.kaggle.com/datasets/yasserh/housing-prices-dataset",
+    },
+    {
+        name: "cia_factbook.csv",
+        description: "CIA Factbook on Countries (2014)",
+        reference: "https://www.openintro.org/data/index.php?data=cia_factbook",
+    },
+    {
         name: "world-dataset-2023.csv",
-        description: "World data statistics dataset.",
+        description: "World data statistics dataset (Kaggle, 2023).",
         reference: "https://www.kaggle.com/fernandol/countries-of-the-world",
     },
     {
-        name: "nba-stats-2022-23.csv",
-        description: "NBA player statistics in the regular season.",
-        reference: "https://www.kaggle.com/justinas/nba-players-data",
+        name: "nba-2023-24.csv",
+        description: "NBA player statistics in the 2023-24 regular season (Basketball Reference, 2024).",
+        reference: "https://www.basketball-reference.com/leagues/NBA_2024_per_game.html",
     },
     {
-        name: "FPL-2022-23.csv",
-        description: "Fantasy Football English Premier League 2022-23.",
-        reference: "https://www.kaggle.com/ahmedelnaggar/fantasy-premier-league-202122",
+        name: "fpl-2023-24.csv",
+        description: "Fantasy Premier League players data in the 2023-24 season (Vaastav Anand, 2022).",
+        reference: "https://github.com/vaastav/Fantasy-Premier-League",
     },
 ]

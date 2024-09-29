@@ -8,7 +8,7 @@ interface DataCardProps {
 const DataCard: React.FC<DataCardProps> = ({ schema }) => {
   return (
     <div className="mt-5 overflow-x-auto">
-      <div className='text-gray-700 text-sm mb-5'><span className='font-bold'>Dataset size:</span> ({schema[0].rows} rows, {schema.length} columns)</div>
+      <div className='text-gray-700 text-sm mb-5'><span className='font-bold'>Size:</span> ({schema[0].rows} rows, {schema.length} columns)</div>
       <table className="w-full text-left text-sm text-gray-500">
           <thead className="bg-gray-50 text-gray-700">
               <tr>
