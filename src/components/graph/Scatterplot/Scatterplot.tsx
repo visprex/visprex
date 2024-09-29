@@ -244,7 +244,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                   marginTop: margin.top,
                 }}
               >
-                <Tooltip interactionData={hovered} />
+                <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
               </div>
           </div>
           <div key='x'>
@@ -342,10 +342,10 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div>
             <span>Add a filter: </span>
-            <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
-            {errorMessageFilter.length > 0 && <div className="text-red-400"><span>{errorMessageFilter}</span></div>}
+              <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
+              {errorMessageFilter.length > 0 && <div className="text-red-400"><span>{errorMessageFilter}</span></div>}
             <span>Current filters: </span>
-            <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
+              <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
           </div>
         </>
       }

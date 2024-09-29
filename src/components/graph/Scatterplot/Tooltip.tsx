@@ -11,19 +11,20 @@ export type InteractionData = {
 
 type TooltipProps = {
   interactionData: InteractionData | null;
+  boundsHeight: number;
 };
 
-export const Tooltip = ({ interactionData }: TooltipProps) => {
+export const Tooltip = ({ interactionData, boundsHeight }: TooltipProps) => {
   if (!interactionData) {
     return null;
   }
 
   return (
     <div
-      className="absolute -translate-y-1/2 rounded-md bg-black px-4 py-2 text-xs text-white opacity-80"
+      className="absolute rounded-md bg-black px-4 py-2 text-xs text-white opacity-80"
       style={{
         left: interactionData.xPos,
-        top: interactionData.yPos,
+        top: interactionData.yPos < boundsHeight / 2 ? interactionData.yPos: interactionData.yPos - boundsHeight / 2,
       }}
     >
       {interactionData.keys.map((key, index) => {
