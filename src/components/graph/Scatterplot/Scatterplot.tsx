@@ -247,8 +247,30 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
               </div>
           </div>
-          <div key='x'>
-              <span>X Axis:</span>
+          <div className='mb-2'>
+            <span className='font-semibold text-gray-500 mb-2'>X Axis</span>
+            <span className='ml-5 font-serif font-thin italic'>f(x):</span>
+            {
+                [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
+                  <button
+                    key={key}
+                    className={`
+                      border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                      m-1 rounded-md px-2 py-1 text-sm
+                      ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                      ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
+                    }
+                    disabled={schema[xAxisIdx].type === 'categorical'}
+                    onClick={() => handleTransformX(key)}
+                  >
+                    {key}
+                  </button>
+                )
+              )
+            }
+            <span className="ml-2 text-red-400">{errorMessageX}</span>
+          </div>
+          <div key='x' className='flex overflow-x-auto'>
               {
                   keys.map((key: string, idx: number ) =>
                       <button
@@ -272,30 +294,30 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                   )
               }
           </div>
-          <div>
-            <span>Transform:</span>
+          <div className="border-t my-2"></div>
+          <div className='mb-2'>
+            <span className='font-semibold text-gray-500 mb-2'>Y Axis</span>
+            <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
                   <button
                     key={key}
                     className={`
-                      border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                      border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm
-                      ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
-                      ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
+                      ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
+                      ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
-                    disabled={schema[xAxisIdx].type === 'categorical'}
-                    onClick={() => handleTransformX(key)}
+                    onClick={() => handleTransformY(key)}
                   >
                     {key}
                   </button>
                 )
               )
             }
-            <span className="ml-2 text-red-400">{errorMessageX}</span>
+            <span className="ml-2 text-red-400">{errorMessageY}</span>
           </div>
-          <div className="mt-4" key='y'>
-              <span>Y Axis: </span>
+          <div className="flex overflow-x-auto" key='y'>
               {
                   keys.map((key: string, idx: number ) =>
                       <button
@@ -319,33 +341,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                   )
               }
           </div>
+          <div className="border-t my-2"></div>
           <div>
-            <span>Transform:</span>
-            {
-                [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
-                  <button
-                    key={key}
-                    className={`
-                      border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                      m-1 rounded-md px-2 py-1 text-sm
-                      ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
-                      ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
-                    }
-                    onClick={() => handleTransformY(key)}
-                  >
-                    {key}
-                  </button>
-                )
-              )
-            }
-            <span className="ml-2 text-red-400">{errorMessageY}</span>
-          </div>
-          <div>
-            <span>Add a filter: </span>
+            <div className='mb-2'>Add a filter: </div>
               <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
               {errorMessageFilter.length > 0 && <div className="text-red-400"><span>{errorMessageFilter}</span></div>}
-            <span>Current filters: </span>
+            <div className='mt-2 mb-2 flex overflow-x-auto'>
+              <span className='mr-2'>Current filters: </span>
               <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
+            </div>  
           </div>
         </>
       }
