@@ -20,21 +20,19 @@ const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }
 
   return (
     <div className='flex'>
-      <div className='bg-gray-100 border-r-1'>
       {filters.map((filter, index) => (
-        <div className='flex align-middle' key={index}>
-          <span>
-            {filter.schemaKey} {filter.operator} {displayFilterValue(filter)}
-          </span>
-          <button onClick={() => onRemoveFilter(index)}>
-            <MinusCircleIcon className='h-5 w-5 ml-3 text-indigo-500'/>
-          </button>
+        <div className='rounded mr-4 bg-indigo-50' key={index}>
+          <div className='flex align-middle'>
+            <span>
+              {filter.schemaKey} {filter.operator} {displayFilterValue(filter)}
+            </span>
+            <button onClick={() => onRemoveFilter(index)}>
+              <MinusCircleIcon className='h-5 w-5 ml-2 text-indigo-500'/>
+            </button>
+          </div>
         </div>
       ))}
     </div>
-
-    </div>
-
   );
 };
 

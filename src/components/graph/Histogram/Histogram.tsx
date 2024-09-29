@@ -119,8 +119,8 @@ export const Histogram = ({
         data={currentDatatype === DataType.Number ? selectedNumberData : selectedCategoricalData}
         datatype={currentDatatype}
       />
-      <div>
-          <span>Select column: </span>
+      <span>Select column: </span>
+      <div className="flex overflow-x-auto">
           {
             keys.map((key, idx) => (
               <button

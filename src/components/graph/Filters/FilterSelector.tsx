@@ -89,7 +89,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
   };
 
   return (
-    <div className='flex align-middle'>
+    <div className='flex flex-wrap align-middle'>
       <select className='border border-gray-300 rounded-md p-1' value={selectedSchemaKey} onChange={handleSchemaChange}>
         {schema.map((s) => (
           <option key={s.key} value={s.key}>
@@ -130,7 +130,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
           onChange={handleValueChange}
         />
       )}
-      <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-3 h-5 w-5"/></button>
+      <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-2 h-6 w-6"/></button>
     </div>
   );
 };
