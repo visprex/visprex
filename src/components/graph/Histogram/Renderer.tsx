@@ -76,7 +76,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
-            .attr("transform", "rotate(-45)")
+            .attr("transform", "rotate(-20)")
             .attr("font-size", "9px")
     }
     const yAxisGenerator = d3.axisLeft(yScale);
