@@ -7,13 +7,14 @@ const NavBar: React.FC<NavBarProps> = () => {
     <div className="w-full">
       <nav className="border-gray-700 bg-gray-800">
         <div className="mx-auto flex flex-wrap items-center justify-between p-4">
-          <a href="/" className="mx-auto flex h-7 flex-col items-center">
-            <img
-              src="/logo.png"
-              className="mr-3 max-h-full"
-              alt="Visprex Logo"
-            />
-          </a>
+            <a href="/" className="mx-auto flex h-7 flex-col items-center">
+              <img
+                src="/logo.webp"
+                className="mr-3 max-h-full"
+                alt="Visprex Logo"
+                loading='lazy'
+              />
+            </a>
         </div>
       </nav>
     </div>
