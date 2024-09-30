@@ -248,7 +248,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
               </div>
           </div>
           <div className='mb-2'>
-            <span className='font-semibold text-gray-500 mb-2'>X Axis</span>
+            <span className='font-semibold text-gray-500 mb-2'>Horizontal Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
@@ -281,7 +281,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                             m-1 rounded-md px-2 py-1 text-sm
                             ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                             ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
+                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
+                            h-8 whitespace-nowrap text-ellipsis`
                           }
                           onClick={() => {
                               setXAxisIdx(idx)
@@ -296,7 +297,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div className="border-t my-2"></div>
           <div className='mb-2'>
-            <span className='font-semibold text-gray-500 mb-2'>Y Axis</span>
+            <span className='font-semibold text-gray-500 mb-2'>Vertical Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
@@ -318,28 +319,27 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className="ml-2 text-red-400">{errorMessageY}</span>
           </div>
           <div className="flex overflow-x-auto" key='y'>
-              {
-                  keys.map((key: string, idx: number ) =>
-                      <button
-                          key={key}
-                          className={`
-                            border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                            m-1 rounded-md px-2 py-1 text-sm
-                            ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
-                            ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
-                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}`
-                          }
-                          disabled={schema[xAxisIdx].type === 'categorical'}
-                          onClick={() => {
-                            setYAxisIdx(idx)
-                            setYTransform(ScatterTransformType.None)
-                          }
-                        }
-                      >
-                          {key}
-                      </button>
-                  )
-              }
+            {
+              keys.map((key: string, idx: number ) =>
+                <button
+                  key={key}
+                  className={`
+                    border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                    m-1 rounded-md px-2 py-1 text-sm
+                    ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                    ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
+                    ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
+                    h-8 whitespace-nowrap text-ellipsis`}
+                  disabled={schema[xAxisIdx].type === 'categorical'}
+                  onClick={() => {
+                    setYAxisIdx(idx)
+                    setYTransform(ScatterTransformType.None)
+                  }}
+                >
+                  {key}
+                </button>
+              )
+            }
           </div>
           <div className="border-t my-2"></div>
           <div>

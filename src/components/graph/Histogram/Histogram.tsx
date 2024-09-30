@@ -129,7 +129,8 @@ export const Histogram = ({
                   border ${currentIdx === idx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                   m-1 rounded-md px-2 py-1 text-sm
                   ${currentIdx === idx ? 'bg-indigo-500' : 'text-indigo-500'}
-                  ${currentIdx === idx ? 'opacity-100' : 'opacity-70'}`
+                  ${currentIdx === idx ? 'opacity-100' : 'opacity-70'}
+                  h-8 whitespace-nowrap text-ellipsis`
                 }
                 onClick={() => handleColumnSelect(idx)}
               >
@@ -139,7 +140,7 @@ export const Histogram = ({
           }
       </div>
       <div>
-          <span>Transform:</span>
+          <span className="mt-2">Transform:</span>
           {
               [TransformType.None, TransformType.Centering, TransformType.Log10, TransformType.Ln].map((key) => (
                 <button
