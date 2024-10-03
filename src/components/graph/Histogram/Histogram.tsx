@@ -119,7 +119,7 @@ export const Histogram = ({
         data={currentDatatype === DataType.Number ? selectedNumberData : selectedCategoricalData}
         datatype={currentDatatype}
       />
-      <span>Select column: </span>
+      <span>Select Column: </span>
       <div className="flex overflow-x-auto">
           {
             keys.map((key, idx) => (
@@ -140,7 +140,7 @@ export const Histogram = ({
           }
       </div>
       <div>
-          <span className="mt-2">Transform:</span>
+          <span className='ml-5 font-serif font-thin italic'>f(x):</span>
           {
               [TransformType.None, TransformType.Centering, TransformType.Log10, TransformType.Ln].map((key) => (
                 <button

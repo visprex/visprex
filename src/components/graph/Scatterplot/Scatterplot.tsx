@@ -193,9 +193,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         r={8}
         cx={xScale(d.x)}
         cy={yScale(d.y)}
-        stroke="#3F51B5"
         fill="#3F51B5"
-        fillOpacity={0.7}
+        fillOpacity={0.6}
         onMouseEnter={() =>
           setHovered({
             xPos: xScale(d.x),
@@ -248,7 +247,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
               </div>
           </div>
           <div className='mb-2'>
-            <span className='font-semibold text-gray-500 mb-2'>Horizontal Axis</span>
+            <span className='font-semibold text-gray-500 mb-2'>X-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
@@ -297,7 +296,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div className="border-t my-2"></div>
           <div className='mb-2'>
-            <span className='font-semibold text-gray-500 mb-2'>Vertical Axis</span>
+            <span className='font-semibold text-gray-500 mb-2'>Y-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [ScatterTransformType.None, ScatterTransformType.Log10, ScatterTransformType.Ln].map((key) => (
@@ -343,11 +342,11 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div className="border-t my-2"></div>
           <div>
-            <div className='mb-2'>Add a filter: </div>
+            <div className='mb-2'><span className='font-semibold text-gray-500 mb-2'>Filters</span></div>
               <FilterSelector schema={schema} onFilterChange={handleAddFilter} />
               {errorMessageFilter.length > 0 && <div className="text-red-400"><span>{errorMessageFilter}</span></div>}
             <div className='mt-2 mb-2 flex overflow-x-auto'>
-              <span className='mr-2'>Current filters: </span>
+              <span className='mr-2'>Current: </span>
               <FilterRemover filters={filters} onRemoveFilter={handleRemoveFilter} />
             </div>  
           </div>
