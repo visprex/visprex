@@ -90,7 +90,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
 
   return (
     <div className='flex flex-wrap align-middle'>
-      <select className='border border-gray-300 rounded-md p-1' value={selectedSchemaKey} onChange={handleSchemaChange}>
+      <select className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto' value={selectedSchemaKey} onChange={handleSchemaChange}>
         {schema.map((s) => (
           <option key={s.key} value={s.key}>
             {s.key}
@@ -115,7 +115,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         )}
       </select>
       {selectedSchema?.type === DataType.Categorical ? (
-        <select className='border border-gray-300 rounded-md p-1' value={inputValue as string} onChange={handleValueChange}>
+        <select className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto' value={inputValue as string} onChange={handleValueChange}>
           {Object.keys((selectedSchema as CategoricalSchema).frequencies).map((freqKey) => (
             <option key={freqKey} value={freqKey}>
               {freqKey}
@@ -124,7 +124,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         </select>
       ) : (
         <input
-          className='border border-gray-300 rounded-md p-1'
+          className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto'
           type="number"
           value={inputValue}
           onChange={handleValueChange}
