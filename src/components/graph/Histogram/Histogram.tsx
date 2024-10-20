@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../utils/schema";
-import { logETransform, log10Transform, center, TransformType } from "../../../utils/transform";
+import { logETransform, log10Transform, TransformType } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 
 const BUTTONS_HEIGHT = 50;
@@ -99,11 +99,6 @@ export const Histogram = ({
           setCurrentDomain([Math.log10(schemaItem.range.min), Math.log10(schemaItem.range.max)]);
           setErrorMessage("");
           break;
-        case TransformType.Centering:
-          setSelectedNumberData(center(currentData as number[], schemaItem.mean));
-          setCurrentDomain([schemaItem.range.min-schemaItem.mean, schemaItem.range.max-schemaItem.mean]);
-          setErrorMessage("");
-          break;
         default:
           break;
       }
@@ -141,7 +136,7 @@ export const Histogram = ({
       <div>
           <span className='ml-5 font-serif font-thin italic'>f(x):</span>
           {
-              [TransformType.None, TransformType.Centering, TransformType.Log10, TransformType.Ln].map((key) => (
+              [TransformType.None, TransformType.Log10, TransformType.Ln].map((key) => (
                 <button
                   key={key}
                   className={`

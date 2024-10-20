@@ -13,7 +13,7 @@ Only network calls this application has are those downloading example datasets. 
 ### Histogram
 ![hist](https://github.com/KengoA/visprex/assets/20113339/7fb3fd86-921d-4f99-a92e-92621bee8ce2)
 
-There are built-in data transformation methods e.g. mean centering, natural log and base-10 log transformations.
+There are built-in data transformation methods e.g. natural log and base-10 log transformations.
 ![hist_log10](https://github.com/KengoA/visprex/assets/20113339/fb6ebf6f-9600-4ac0-b226-3faf832ec618)
 
 ### Scatterplot

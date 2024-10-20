@@ -33,7 +33,7 @@ export type Value = number | string;
 
 export function inferSchema(keys: string[], matrix: Value[][]): Schema[] {
  return keys.map((key: string, index: number) => {
-    let schema: Schema;  
+    let schema: Schema;
     const mean = _.mean(matrix[index])
     isNaN(mean) ? 
       schema = {
