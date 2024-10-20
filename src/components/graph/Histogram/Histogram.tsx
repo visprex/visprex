@@ -81,7 +81,7 @@ export const Histogram = ({
           break;
         case TransformType.Ln:
           if (schemaItem.range.min <= 0) {
-            setErrorMessage("Error: All numbers must be positive for ln(x) transform.");
+            setErrorMessage("Error: All numbers must be positive for log transform.");
             setCurrentTransform(TransformType.None);
             return;
           }
@@ -91,7 +91,7 @@ export const Histogram = ({
           break;
         case TransformType.Log10:
           if (schemaItem.range.min <= 0) {
-            setErrorMessage("Error: All numbers must be positive for log10(x) transform.");
+            setErrorMessage("Error: All numbers must be positive for log transform.");
             setCurrentTransform(TransformType.None);
             return;
           }
@@ -119,7 +119,6 @@ export const Histogram = ({
         data={currentDatatype === DataType.Number ? selectedNumberData : selectedCategoricalData}
         datatype={currentDatatype}
       />
-      <span>Select Column: </span>
       <div className="flex overflow-x-auto">
           {
             keys.map((key, idx) => (

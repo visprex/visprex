@@ -24,7 +24,10 @@ export function logETransform(array: number[]): number[] {
 }
 
 export const transformOps:  {[key: string]: (x: number) => number}= {
-    "none": (x: number) => x,
+    "x": (x: number) => x,
+    "y": (x: number) => x,
     "log10(x)": (x: number) => Math.log10(x),
+    "log10(y)": (x: number) => Math.log10(x),
     "ln(x)": (x: number) => Math.log(x),
+    "ln(y)": (x: number) => Math.log(x),
 }
