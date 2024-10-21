@@ -3,14 +3,12 @@
     <img src="https://github.com/visprex/visprex/assets/20113339/03fae63d-6518-45b5-affd-da00e0c746b2" />
   </p>
   <p align="center">Visualise your CSV files <b>in seconds</b> without sending your data anywhere</p>
+  <p align="center"> <a href="https://visprex.com">Visprex App</a> | <a href="https://docs.visprex.com">Documentation</a></p>
 </div>
 
 ## Getting Started
-- [Visprex App](https://www.visprex.com)
-- [Visprex Documentation](https://docs.visprex.com)
 
 ### Loading your dataset
-
 Your data is procecced entirely in your browser without sending your data to any servers. Only network calls this application has are those downloading example datasets from public buckets.
 
 Once you upload your CSV file, it will automatically parse your data into either `Categorical` or `Numerical` types
