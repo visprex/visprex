@@ -3,7 +3,7 @@
     <img src="https://github.com/visprex/visprex/assets/20113339/03fae63d-6518-45b5-affd-da00e0c746b2" />
   </p>
   <p align="center">Visualise your CSV files <b>in seconds</b> without sending your data anywhere</p>
-  <p align="center"> <a href="https://visprex.com">Visprex App</a> | <a href="https://docs.visprex.com">Documentation</a></p>
+  <p align="center"> <a href="https://www.visprex.com">Visprex App</a> | <a href="https://docs.visprex.com">Documentation</a></p>
 </div>
 
 ## Getting Started
