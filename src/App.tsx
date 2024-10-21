@@ -9,7 +9,7 @@ import Navbar from './components/navigation/Navbar';
 import NoDatasetSelected from './components/navigation/NoDatasetSelected';
 import Dataloader from './components/data/Dataloader';
 import DataCard from './components/data/DataCard';
-import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import NotEnoughNumericalColumns from './components/navigation/NotEnoughNumericalColumns';
 
 export default function App() {
@@ -37,6 +37,11 @@ export default function App() {
       href: "#correlationmatrix",
       icon: CalculatorIcon,
     },
+    {
+      name: "Documentation",
+      href: "https://docs.visprex.com",
+      icon: DocumentTextIcon,
+    }
   ];
 
   const [currentTab, setCurrentTab] = useState("Datasets");
@@ -62,6 +67,7 @@ export default function App() {
   }, []);
 
   const handleTabClick = (tabName: string) => {
+    if (tabName === 'Documentation') return;
     setCurrentTab(tabName);
   };
 
@@ -75,6 +81,7 @@ export default function App() {
               <a
                 key={tab.name}
                 href={tab.href}
+                target={tab.name == "Documentation" ? "_blank": undefined}
                 className={classNames(
                   tab.name === currentTab
                     ? "border-indigo-500 text-indigo-600"
