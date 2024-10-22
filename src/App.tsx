@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { DataType, Schema, Value } from './types/schema';
-import { DataLoader, DataCard } from './components/data';
+import { Dataloader, DataCard } from './components/data';
 import { NavBar, NoDatasetSelected, NotEnoughNumericalColumns} from './components/navigation';
 import { Histogram, Scatterplot, CorrelationMatrix } from './components/graph';
 import { classNames, transpose, inferSchema } from './utils';
@@ -102,7 +102,7 @@ export default function App() {
         <div>
           {currentTab === 'Datasets' && 
             <>
-              <DataLoader onDataParsed={handleDataParsed}/>
+              <Dataloader onDataParsed={handleDataParsed}/>
               {(schema.length > 0 && <DataCard schema={schema} />)}
             </>
           }
