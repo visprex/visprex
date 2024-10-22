@@ -14,8 +14,7 @@ FROM fholzer/nginx-brotli:v1.21.6
 
 WORKDIR /etc/nginx
 
-ADD nginx.conf /etc/nginx/nginx.conf
-
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 8080
