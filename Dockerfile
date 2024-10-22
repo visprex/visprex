@@ -3,14 +3,14 @@ FROM node:lts-alpine as builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
-COPY . .
+COPY . ./
 RUN npm run build
 
-# stage 2: serve 
-FROM fholzer/nginx-brotli:latest
+# stage 2: serve
+FROM fholzer/nginx-brotli:v1.26.2
 
 WORKDIR /etc/nginx
 
