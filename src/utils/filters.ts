@@ -1,4 +1,4 @@
-import { DataType, Schema, Value } from "./schema";
+import { DataType, Schema, Value } from "../types/schema";
 import { transpose } from "./transform";
 
 export enum Operator {

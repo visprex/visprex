@@ -1,4 +1,4 @@
-import { Value } from "./schema";
+import { Value } from "../types/schema";
 
 export enum TransformType {
     None = "x",
@@ -18,7 +18,7 @@ export function logETransform(array: number[]): number[] {
     return array.map((value: number) => Math.log(value));
 }
 
-export const transformOps:  {[key: string]: (x: number) => number}= {
+export const transformOps: {[key: string]: (x: number) => number}= {
     "x": (x: number) => x,
     "y": (x: number) => x,
     "log10(x)": (x: number) => Math.log10(x),

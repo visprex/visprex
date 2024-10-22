@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Schema, Value } from "../../../utils/schema";
+import { Schema, Value } from "../../../types/schema";
 import { calculateCorrelations, Correlation } from '../../../utils/stats';
 import { Tooltip } from './Tooltip';
 import { Renderer } from './Renderer';

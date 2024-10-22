@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../utils/schema";
+import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../types/schema";
 import { logETransform, log10Transform, TransformType } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 

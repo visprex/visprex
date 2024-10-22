@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../utils/schema";
+import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../types/schema";
 import { Filter, Operator, CategoricalFilter, NumberFilter } from "../../../utils/filters";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
