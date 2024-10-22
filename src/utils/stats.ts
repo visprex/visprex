@@ -1,4 +1,4 @@
-import { Schema, NumberSchema, DataType, Value } from './schema';
+import { Schema, NumberSchema, DataType, Value } from '../types/schema';
 
 export type Correlation = {
     x: string,

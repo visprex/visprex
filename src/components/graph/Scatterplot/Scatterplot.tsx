@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Schema, NumberSchema, DataType, Value } from "../../../utils/schema";
+import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
 import { Filter, filterMatrix } from "../../../utils/filters";
 import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';

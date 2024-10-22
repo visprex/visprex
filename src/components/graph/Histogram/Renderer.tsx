@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { Rectangle } from "./Rectangle";
-import { DataType } from "../../../utils/schema";
+import { DataType } from "../../../types/schema";
 
 const MARGIN = { top: 30, right: 30, bottom: 40, left: 50 };
 const BUCKET_PADDING = 2;

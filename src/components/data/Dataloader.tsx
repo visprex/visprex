@@ -2,11 +2,11 @@ import React, { useState, useCallback } from 'react';
 import Papa from 'papaparse';
 import { bucketURL, datasets } from './constants';
 
-interface DataloaderProps {
+interface DataLoaderProps {
   onDataParsed: (data: Papa.ParseResult<never[]>) => void;
 }
 
-const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
+const DataLoader: React.FC<DataLoaderProps> = ({ onDataParsed }) => {
   const [datasetIdx, setDatasetIdx] = useState<number|null>(null)
 
   const handleDownload = (idx: number) => {
@@ -78,7 +78,6 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
             ))
           }
         </div>
-        {/* display dataset details with description and reference */}
         {datasetIdx !==null && <div className="text-sm text-gray-500">
           <span className='mr-1'>{datasets[datasetIdx]?.description}</span>
           <a href={datasets[datasetIdx]?.reference} target="_blank" rel="noreferrer" className="text-indigo-500">Reference</a>
@@ -88,4 +87,4 @@ const Dataloader: React.FC<DataloaderProps> = ({ onDataParsed }) => {
   );
 };
 
-export default Dataloader;
+export default DataLoader;

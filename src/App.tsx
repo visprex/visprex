@@ -1,16 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { Histogram }  from './components/graph/Histogram/Histogram';
-import { Scatterplot }  from './components/graph/Scatterplot/Scatterplot';
-import { CorrelationMatrix }  from './components/graph/CorrelationMatrix/CorrelationMatrix';
-import { DataType, inferSchema, Schema, Value } from './utils/schema';
-import { classNames } from './utils/classnames';
-import { transpose } from './utils/transform';
-import Navbar from './components/navigation/Navbar';
-import NoDatasetSelected from './components/navigation/NoDatasetSelected';
-import Dataloader from './components/data/Dataloader';
-import DataCard from './components/data/DataCard';
+import { DataType, Schema, Value } from './types/schema';
+import { DataLoader, DataCard } from './components/data';
+import { NavBar, NoDatasetSelected, NotEnoughNumericalColumns} from './components/navigation';
+import { Histogram, Scatterplot, CorrelationMatrix } from './components/graph';
+import { classNames, transpose, inferSchema } from './utils';
 import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
-import NotEnoughNumericalColumns from './components/navigation/NotEnoughNumericalColumns';
 
 export default function App() {
   const elementRef = useRef<HTMLDivElement | null>(null)
@@ -73,7 +67,7 @@ export default function App() {
 
   return (
     <div className='w-full'>        
-      <Navbar/>
+      <NavBar/>
       <div ref={elementRef} className="container mx-auto p-4">
         <div className="border-b border-gray-200">
           <nav className="flex flex-col space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0" aria-label="Tabs">
@@ -108,7 +102,7 @@ export default function App() {
         <div>
           {currentTab === 'Datasets' && 
             <>
-              <Dataloader onDataParsed={handleDataParsed}/>
+              <DataLoader onDataParsed={handleDataParsed}/>
               {(schema.length > 0 && <DataCard schema={schema} />)}
             </>
           }
