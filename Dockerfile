@@ -4,8 +4,7 @@ FROM node:lts-alpine as builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --omit=dev
-RUN npm install vite
+RUN npm install
 
 COPY . .
 RUN npm run build
