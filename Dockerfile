@@ -10,11 +10,11 @@ COPY . ./
 RUN npm run build
 
 # stage 2: serve
-FROM fholzer/nginx-brotli:v1.21.6
+FROM fholzer/nginx-brotli:v1.12.2
 
 WORKDIR /etc/nginx
 
-COPY nginx.conf /etc/nginx/nginx.conf
+ADD nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 8080
