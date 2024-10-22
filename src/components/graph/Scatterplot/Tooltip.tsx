@@ -1,5 +1,5 @@
 import { convertNumberNotation } from "./utils";
-import { Value } from "../../../utils/schema";
+import { Value } from "../../../types/schema";
 
 
 export type InteractionData = {
