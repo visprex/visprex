@@ -10,8 +10,7 @@ COPY . .
 RUN npm run build
 
 # stage 2: serve 
-FROM nginx:stable-alpine as production
-RUN apk add --no-cache nginx-mod-brotli
+FROM fholzer/nginx-brotli:latest
 
 WORKDIR /etc/nginx
 
