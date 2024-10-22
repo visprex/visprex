@@ -1,4 +1,4 @@
-import DataLoader from "./DataLoader";
+import Dataloader from "./Dataloader";
 import DataCard from "./DataCard";
 
-export { DataCard, DataLoader };
+export { DataCard, Dataloader };
