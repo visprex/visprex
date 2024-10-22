@@ -10,7 +10,7 @@ COPY . ./
 RUN npm run build
 
 # stage 2: serve
-FROM fholzer/nginx-brotli:v1.12.1
+FROM fholzer/nginx-brotli:v1.12.2
 
 WORKDIR /etc/nginx
 
