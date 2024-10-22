@@ -11,7 +11,6 @@ COPY . .
 RUN npm run build
 
 # stage 2: serve 
-
 FROM fholzer/nginx-brotli:latest
 
 WORKDIR /etc/nginx
