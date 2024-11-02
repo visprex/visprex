@@ -62,6 +62,7 @@ jobs:
       id-token: 'write'
 
     runs-on: ubuntu-latest
+    if: github.repository == 'visprex/visprex'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
