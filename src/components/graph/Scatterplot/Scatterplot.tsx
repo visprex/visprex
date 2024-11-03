@@ -13,13 +13,15 @@ import FilterSelector from '../Filters/FilterSelector';
 enum ScatterTransformTypeX {
   None = "x",
   Log10 = "log10(x)",
-  Ln = "ln(x)"
+  Ln = "ln(x)",
+  Squared = "x^2"
 }
 
 enum ScatterTransformTypeY {
   None = "y",
   Log10 = "log10(y)",
-  Ln = "ln(y)"
+  Ln = "ln(y)",
+  Squared = "y^2"
 }
 
 interface ScatterplotProps {
@@ -69,6 +71,10 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setXTransform(ScatterTransformTypeX.None);
         setErrorMessageX("");
         break;
+      case ScatterTransformTypeX.Squared:
+        setXTransform(ScatterTransformTypeX.Squared);
+        setErrorMessageX("");
+        break;
       case ScatterTransformTypeX.Ln:
         if (schemaItem.range.min <= 0) {
           setErrorMessageX("Error: All numbers must be positive for log transform.");
@@ -100,6 +106,10 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
     switch (key) {
       case ScatterTransformTypeY.None:
         setYTransform(ScatterTransformTypeY.None);
+        setErrorMessageY("");
+        break;
+      case ScatterTransformTypeY.Squared:
+        setYTransform(ScatterTransformTypeY.Squared);
         setErrorMessageY("");
         break;
       case ScatterTransformTypeY.Ln:
@@ -256,7 +266,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='font-semibold text-gray-500 mb-2'>X-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
-                [ScatterTransformTypeX.None, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
+                [ScatterTransformTypeX.None, ScatterTransformTypeX.Squared, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
                   <button
                     key={key}
                     className={`
@@ -268,7 +278,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                     disabled={schema[xAxisIdx].type === 'categorical'}
                     onClick={() => handleTransformX(key)}
                   >
-                    {key}
+                    { key === ScatterTransformTypeX.Squared ? <p>x<sup>2</sup></p> : key}
                   </button>
                 )
               )
@@ -295,7 +305,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                             }
                         }
                       >
-                          {key}
+                        {key}
                       </button>
                   )
               }
@@ -305,7 +315,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='font-semibold text-gray-500 mb-2'>Y-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(y):</span>
             {
-                [ScatterTransformTypeY.None, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
+                [ScatterTransformTypeY.None, ScatterTransformTypeY.Squared, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
                   <button
                     key={key}
                     className={`
@@ -316,7 +326,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                     }
                     onClick={() => handleTransformY(key)}
                   >
-                    {key}
+                    { key === ScatterTransformTypeY.Squared ? <p>y<sup>2</sup></p> : key}
                   </button>
                 )
               )

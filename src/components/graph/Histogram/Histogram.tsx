@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../types/schema";
-import { logETransform, log10Transform, TransformType } from "../../../utils/transform";
+import { logETransform, log10Transform, TransformType, squaredTransform } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 
 const BUTTONS_HEIGHT = 50;
@@ -79,6 +79,11 @@ export const Histogram = ({
           setCurrentDomain([schemaItem.range.min-1, schemaItem.range.max+1]);
           setErrorMessage("");
           break;
+        case TransformType.Squared:
+          setSelectedNumberData(squaredTransform(currentData as number[]));
+          setCurrentDomain([schemaItem.range.min ** 2, schemaItem.range.max ** 2]);
+          setErrorMessage("");
+          break;
         case TransformType.Ln:
           if (schemaItem.range.min <= 0) {
             setErrorMessage("Error: All numbers must be positive for log transform.");
@@ -136,7 +141,7 @@ export const Histogram = ({
       <div>
           <span className='ml-5 font-serif font-thin italic'>f(x):</span>
           {
-              [TransformType.None, TransformType.Log10, TransformType.Ln].map((key) => (
+              [TransformType.None, TransformType.Squared, TransformType.Log10, TransformType.Ln].map((key) => (
                 <button
                   key={key}
                   className={`
@@ -149,7 +154,7 @@ export const Histogram = ({
                   }
                   onClick={() => handleTransform(key)}
                 >
-                  {key}
+                  {key === TransformType.Squared ? <p>x<sup>2</sup></p> : key}
                 </button>
               )
             )
