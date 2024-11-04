@@ -6,7 +6,7 @@ import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
-import TooManyRows, { MAX_ROWS_TO_DISPLY } from '../../navigation/TooManyRows';
+import { TooManyRows, MAX_ROWS_TO_DISPLAY }  from '../../errors';
 import FilterRemover from '../Filters/FilterRemover';
 import FilterSelector from '../Filters/FilterSelector';
 
@@ -14,14 +14,14 @@ enum ScatterTransformTypeX {
   None = "x",
   Log10 = "log10(x)",
   Ln = "ln(x)",
-  Squared = "x^2"
+  Squared = "x²"
 }
 
 enum ScatterTransformTypeY {
   None = "y",
   Log10 = "log10(y)",
   Ln = "ln(y)",
-  Squared = "y^2"
+  Squared = "y²"
 }
 
 interface ScatterplotProps {
@@ -227,7 +227,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   return (
     <div id='scatterplot' className='mx-auto'>
       {
-        allShapes.length > MAX_ROWS_TO_DISPLY ? <TooManyRows rows={allShapes.length} /> :
+        allShapes.length > MAX_ROWS_TO_DISPLAY ? <TooManyRows rows={allShapes.length} /> :
         <>
           <div className="relative my-5">
               <svg width={width} height={height}>
@@ -278,7 +278,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                     disabled={schema[xAxisIdx].type === 'categorical'}
                     onClick={() => handleTransformX(key)}
                   >
-                    { key === ScatterTransformTypeX.Squared ? <p>x<sup>2</sup></p> : key}
+                    {key}
                   </button>
                 )
               )
@@ -326,7 +326,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                     }
                     onClick={() => handleTransformY(key)}
                   >
-                    { key === ScatterTransformTypeY.Squared ? <p>y<sup>2</sup></p> : key}
+                    {key}
                   </button>
                 )
               )
