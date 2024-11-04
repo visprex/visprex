@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { DataType, Schema, Value } from './types/schema';
 import { Dataloader, DataCard } from './components/data';
-import { NavBar, NoDatasetSelected, NotEnoughNumericalColumns} from './components/navigation';
+import { NavBar } from './components/navigation';
+import { NoDatasetSelected, NotEnoughNumericalColumns} from './components/errors';
 import { Histogram, Scatterplot, CorrelationMatrix } from './components/graph';
 import { classNames, transpose, inferSchema } from './utils';
 import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
