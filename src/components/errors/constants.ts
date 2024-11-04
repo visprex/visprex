@@ -1,0 +1,1 @@
+export const MAX_ROWS_TO_DISPLAY = 1000000;

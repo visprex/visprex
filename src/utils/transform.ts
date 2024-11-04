@@ -4,7 +4,7 @@ export enum TransformType {
     None = "x",
     Log10 = "log10(x)",
     Ln = "ln(x)",
-    Squared = "x^2",
+    Squared = "x²",
 }
 
 export function transpose(matrix: Value[][]): Value[][] {
@@ -26,8 +26,8 @@ export function squaredTransform(array: number[]): number[] {
 export const transformOps: {[key: string]: (x: number) => number}= {
     "x": (x: number) => x,
     "y": (x: number) => x,
-    "x^2": (x: number) => x ** 2,
-    "y^2": (x: number) => x ** 2,
+    "x²": (x: number) => x ** 2,
+    "y²": (x: number) => x ** 2,
     "log10(x)": (x: number) => Math.log10(x),
     "log10(y)": (x: number) => Math.log10(x),
     "ln(x)": (x: number) => Math.log(x),
