@@ -9,9 +9,9 @@
 ## Getting Started
 
 ### Loading your dataset
-Your data is procecced entirely in your browser without sending your data to any servers. Only network calls this application has are those downloading example datasets from public buckets.
+Your data is processed entirely in your browser without sending your data to any backend servers. The only network calls this application makes are for downloading example datasets from public sources.
 
-Once you upload your CSV file, it will automatically parse your data into either `Categorical` or `Numerical` types
+Once you load your CSV file, it will automatically parse your data into either `Categorical` or `Numerical` types
 
 ![schema](https://github.com/user-attachments/assets/d526dfb9-adc6-4028-8b1d-71d96780a7ba)
 
@@ -20,11 +20,11 @@ Once you upload your CSV file, it will automatically parse your data into either
 
 ### Visualise your data
 #### Histogram
-Histograms are useful for understanding the feature distributions, especially to see if they follow certain distributions (e.g. Gaussian, uniform, Poisson etc).
+Histograms are useful for understanding feature distributions, especially to see if they follow certain distributions (e.g. Gaussian, uniform, Poisson etc).
 
 ![hist](https://github.com/user-attachments/assets/981439d2-29e5-4250-a069-8e95ec66fc90)
 
-There are built-in log transformation methods available.
+There are also built-in feature transformation methods (square, natural log, log10) available.
 
 ![log_hist](https://github.com/user-attachments/assets/5876a33d-7ae8-49a0-8621-a598b0b75424)
 
@@ -32,7 +32,7 @@ There are built-in log transformation methods available.
 
 
 #### Scatterplot
-You can choose two variables to visualise on a 2D scatterplot. The variable you choose first will show up on the X-axis and the second variable will be on the Y-axis.
+You can choose two variables to visualise on a 2D scatterplot. The first variable you choose will appear on the X-axis, and the second will appear on the Y-axis.
 
 Hovering over individual points will show you the details of that instance.
 
@@ -46,7 +46,7 @@ You can optionally add **filters** to control for certain variable values or loo
 
 
 #### Correlation Matrix
-You can find linear correlations for any pair of variables from the correlation map, where purpole indicates positive correlation and red indicates negative correlation.
+You can find linear correlations for any pair of variables from the correlation map, where purple indicates positive correlation and red indicates negative correlation.
 
 ![corr](https://github.com/user-attachments/assets/1b5a2eb6-5129-478c-947f-8685d41363de)
 
