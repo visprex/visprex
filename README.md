@@ -9,7 +9,7 @@
 ## Getting Started
 
 ### Loading your dataset
-Your data is processed entirely in your browser without sending your data to any backend servers. The only network calls this application makes are for downloading example datasets from public sources.
+Your data is processed entirely in your browser without sending your data to any backend servers. The only network calls this application makes are for downloading example datasets from public GCS buckets.
 
 Once you load your CSV file, it will automatically parse your data into either `Categorical` or `Numerical` types
 
