@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { DataType, Schema, Value } from './types/schema';
 import { Dataloader, DataCard } from './components/data';
 import { NavBar } from './components/navigation';
-import { NoDatasetSelected, NotEnoughNumericalColumns} from './components/errors';
-import { Histogram, Scatterplot, CorrelationMatrix } from './components/graph';
+import { NoDatasetSelected, NoDateTimeDetected, NoNumericalColumnsForLineplot, NotEnoughNumericalColumns} from './components/errors';
+import { Histogram, Scatterplot, CorrelationMatrix, Lineplot } from './components/graph';
 import { classNames, transpose, inferSchema } from './utils';
-import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 
 export default function App() {
   const elementRef = useRef<HTMLDivElement | null>(null)
@@ -26,6 +26,11 @@ export default function App() {
       name: "Scatter Plot",
       href: "#scatterplot",
       icon: CubeTransparentIcon,
+    },
+    {
+      name: "Line Plot",
+      href: "#lineplot",
+      icon: ArrowTrendingUpIcon,
     },
     {
       name: "Correlation Matrix",
@@ -116,6 +121,14 @@ export default function App() {
             :
               <NoDatasetSelected/>
             )
+          }
+          {currentTab === 'Line Plot' && (schema.length > 0 ?
+            schema.filter(s => s.type == DataType.DateTime).length > 0 ?
+              schema.filter(s => s.type == DataType.Number).length > 0 ?
+                <Lineplot height={450} width={width} matrix={matrix} keys={keys} schema={schema}/>
+                : <NoNumericalColumnsForLineplot/>
+              : <NoDateTimeDetected/>:
+            <NoDatasetSelected/>)
           }
           {currentTab === 'Correlation Matrix' && (schema.length > 0 ? <CorrelationMatrix height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
         </div>
