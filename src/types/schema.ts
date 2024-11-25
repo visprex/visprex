@@ -1,6 +1,7 @@
 export enum DataType {
-  Number = 'number',
-  Categorical = 'categorical',
+  Number = 'Numerical',
+  Categorical = 'Categorical',
+  DateTime = 'DateTime'
 }
 
 export type NumberSchema = {
@@ -25,6 +26,20 @@ export type CategoricalSchema = {
   }
 }
 
-export type Schema = NumberSchema | CategoricalSchema;
+export type DateTimeSchema = {
+  type: DataType.DateTime,
+  rows: number,
+  index: number,
+  key: string
+  range: {
+    min: number,
+    max: number,
+  }
+  frequencies: {
+    [key: string]: number
+  }
+}
+
+export type Schema = NumberSchema | CategoricalSchema | DateTimeSchema;
 
 export type Value = number | string;
