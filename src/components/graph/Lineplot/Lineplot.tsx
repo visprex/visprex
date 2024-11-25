@@ -17,8 +17,8 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   const numberSchema = schema.filter((schemaItem) => schemaItem.type === DataType.Number) as NumberSchema[];
 
   const [hovered, setHovered] = useState<InteractionData | null>(null);
-  const [xAxisIdx, setXAxisIdx] = useState(dateTimeSchema[0]?.index ?? 0);
-  const [yAxisIdx, setYAxisIdx] = useState(numberSchema[0]?.index ?? 0);
+  const [xAxisIdx, setXAxisIdx] = useState(dateTimeSchema[0].index);
+  const [yAxisIdx, setYAxisIdx] = useState(numberSchema[0].index);
 
   const margin = { top: 30, right: 35, bottom: 30, left: 35 };
   const boundsWidth = width - margin.left - margin.right;
@@ -42,7 +42,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   const yScale = d3.scaleLinear()
     .domain(domain.y)
     .range([boundsHeight, 0]);
-
+  
   useEffect(() => {
     if (lineRef.current) {
       const svg = d3.select(lineRef.current);
@@ -124,7 +124,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           setHovered(null);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [xAxisIdx, yAxisIdx]);
     
   return (

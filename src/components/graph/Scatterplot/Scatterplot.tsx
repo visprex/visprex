@@ -63,7 +63,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   
   function handleTransformX(key: string) {
     const schemaItem = schema[xAxisIdx];
-    if (schemaItem.type === DataType.Categorical) {
+    if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
@@ -100,7 +100,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   function handleTransformY (key: string) {
     const schemaItem = schema[yAxisIdx];
-    if (schemaItem.type === DataType.Categorical) {
+    if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
@@ -270,7 +270,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 [ScatterTransformTypeX.None, ScatterTransformTypeX.Squared, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
                   <button
                     key={key}
-                    disabled={schema[xAxisIdx].type === DataType.Categorical}
+                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[xAxisIdx].type)}
                     className={`
                       border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm
@@ -322,6 +322,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 [ScatterTransformTypeY.None, ScatterTransformTypeY.Squared, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
                   <button
                     key={key}
+                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[xAxisIdx].type)}
                     className={`
                       border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm

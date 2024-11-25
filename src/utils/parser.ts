@@ -34,9 +34,9 @@ export function inferSchema(keys: string[], matrix: Value[][]): Schema[] {
         key,
         range: {
           min: _.min(values.filter((v) => v > 0)),
-          max: _.max(values.filter((v) => v > 0)),
+          max: _.max(values.filter((v) => v < dayjs().unix() * 1000)),
         },
-        frequencies: _.countBy(matrix[index].map((v) => (v === null || v === undefined) ? "N/A" : v))
+        frequencies: _.countBy(matrix[index].map((v) => (v === null || v === undefined || v === "") ? "N/A" : v))
       } as DateTimeSchema
     }
     return {
