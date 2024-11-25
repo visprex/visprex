@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../types/schema";
+import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
 import { logETransform, log10Transform, TransformType, squaredTransform } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 
@@ -25,26 +25,26 @@ export const Histogram = ({
   let initialDomain: [number, number];
   firstSchemaItem.type === DataType.Number ?
     initialDomain = [(firstSchemaItem as NumberSchema).range.min-1, (firstSchemaItem as NumberSchema).range.max+1] :
-    initialDomain = [0,Object.keys((firstSchemaItem as CategoricalSchema).frequencies).length];
+    initialDomain = [0,Object.keys(firstSchemaItem.frequencies).length];
 
   let initialNumberData: number[];
-  let initialCategoricalData: {[key: string]:number};
+  let initialStringData: {[key: string]:number};
 
   if (firstSchemaItem.type === DataType.Number) {
     initialNumberData = matrix[0].map((d) => d as number)
-    initialCategoricalData = {}
+    initialStringData = {}
   } else {
     initialNumberData = []
-    initialCategoricalData = (firstSchemaItem as CategoricalSchema).frequencies
+    initialStringData = firstSchemaItem.frequencies
   }
 
   const [selectedNumberData, setSelectedNumberData] = useState<number[]>(initialNumberData);
-  const [selectedCategoricalData, setSelectedCategoricalData] = useState<{[key: string]:number}>(initialCategoricalData);
+  const [selectedStringData, setSelectedStringData] = useState<{[key: string]:number}>(initialStringData);
 
   const [currentIdx, setCurrentIdx] = useState(0);
 
   const [currentDomain, setCurrentDomain] = useState<[number, number]>(initialDomain);
-  const [currentDatatype, setCurrentDatatype] = useState(firstSchemaItem.type);
+  const [currentDataType, setCurrentDataType] = useState(firstSchemaItem.type);
   
   const [currentTransform, setCurrentTransform] = useState(TransformType.None);
   const [errorMessage, setErrorMessage] = useState("");
@@ -53,13 +53,13 @@ export const Histogram = ({
     setCurrentIdx(idx);
     const schemaItem = schema[idx];
     if (schemaItem.type === DataType.Number) {
-      setCurrentDatatype(DataType.Number);
+      setCurrentDataType(DataType.Number);
       setSelectedNumberData(matrix[idx] as number[]);
       setCurrentDomain([schemaItem.range.min-1, schemaItem.range.max+1]);
     } else {
-      setCurrentDatatype(DataType.Categorical);
-      setSelectedCategoricalData((schemaItem as CategoricalSchema).frequencies);
-      setCurrentDomain([0,Object.keys((schemaItem as CategoricalSchema).frequencies).length]);
+      setCurrentDataType(schemaItem.type);
+      setSelectedStringData(schemaItem.frequencies);
+      setCurrentDomain([0,Object.keys(schemaItem.frequencies).length]);
     }
     setCurrentTransform(TransformType.None);
   }
@@ -70,6 +70,10 @@ export const Histogram = ({
       const schemaItem = schema[currentIdx];
       setCurrentTransform(key);
       if (schemaItem.type === DataType.Categorical) {
+        setErrorMessage("");
+        return;
+      }
+      if (schemaItem.type === DataType.DateTime) {
         setErrorMessage("");
         return;
       }
@@ -116,8 +120,8 @@ export const Histogram = ({
         width={width}
         height={height - BUTTONS_HEIGHT}
         domain={currentDomain}
-        data={currentDatatype === DataType.Number ? selectedNumberData : selectedCategoricalData}
-        datatype={currentDatatype}
+        data={currentDataType === DataType.Number ? selectedNumberData : selectedStringData}
+        dataType={currentDataType}
       />
       <div className="flex overflow-x-auto">
           {
@@ -149,12 +153,14 @@ export const Histogram = ({
                     m-1 rounded-md px-2 py-1 text-sm
                     ${currentTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                     ${currentTransform === key ? 'opacity-100' : 'opacity-70'}
-                    ${currentDatatype === DataType.Categorical && key !== TransformType.None ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50'  : 'cursor-pointer'}
+                    ${[DataType.Categorical, DataType.DateTime].includes(currentDataType) && key !== TransformType.None ?
+                      'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50'  : 'cursor-pointer'
+                    }
                     `
                   }
                   onClick={() => handleTransform(key)}
                 >
-                  {key === TransformType.Squared ? <p>x<sup>2</sup></p> : key}
+                  {key}
                 </button>
               )
             )

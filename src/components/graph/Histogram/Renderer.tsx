@@ -12,16 +12,16 @@ type RendererProps = {
   height: number;
   domain: [number, number];
   data: number[] | {[key: string]:number};
-  datatype: DataType;
+  dataType: DataType;
 };
 
-export const Renderer = ({ width, height, domain, data, datatype }: RendererProps) => {
+export const Renderer = ({ width, height, domain, data, dataType }: RendererProps) => {
   const histRef = useRef(null);
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
   
   const xLabelScale = useMemo(() => {
-    if (datatype === DataType.Number) {
+    if (dataType === DataType.Number) {
       return d3.scaleBand()
     }
     return d3
@@ -29,63 +29,62 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
       .range([0, boundsWidth])
       .domain(Object.keys(data))
       .padding(0.2);
-  }, [data, boundsWidth, datatype]);
+  }, [data, boundsWidth, dataType]);
 
   const xScale = useMemo(() => {
     return d3.scaleLinear().domain(domain).range([10, boundsWidth]);
   }, [domain, boundsWidth]);
 
-  const buckets = useMemo(() => {
-    if (datatype === DataType.Categorical) {
-        return Object.values(data).map((value: number, index: number) =>
+  const buckets = useMemo(() => (
+    [DataType.Categorical, DataType.DateTime].includes(dataType) ?
+      Object.values(data).map((value: number, index: number) =>
         ({
             x0: index,
             x1: index+1,
             length: value
         } as d3.Bin<number, number>))
-    } else {
-        const bucketGenerator = d3
-            .bin()
-            .value((d) => d)
-            .domain(domain)
-            .thresholds(xScale.ticks(BUCKET_NUMBER));
-        return bucketGenerator(data as number[]);
-    }
-  }, [xScale, domain, data, datatype]);
+    :
+      d3
+        .bin()
+        .value((d) => d)
+        .domain(domain)
+        .thresholds(xScale.ticks(BUCKET_NUMBER))(data as number[])
+  ),[xScale, domain, data, dataType]);
 
   const yScale = useMemo(() => {
     let max;
-    datatype === DataType.Categorical ?
-        max = Math.max(...Object.values(data)) :
-        max = Math.max(...buckets.map((bucket) => bucket?.length))
+    [DataType.Categorical, DataType.DateTime].includes(dataType) ?
+      max = Math.max(...Object.values(data)) :
+      max = Math.max(...buckets.map((bucket) => bucket?.length))
     return d3.scaleLinear().range([boundsHeight, 0]).domain([0, max]).nice();
-  }, [datatype, data, buckets, boundsHeight]);
+  }, [dataType, data, buckets, boundsHeight]);
 
   useEffect(() => {
-    const svgElement = d3.select(histRef.current);
-    svgElement.selectAll("*").remove();
+    const svg = d3.select(histRef.current);
+    svg.selectAll("*").remove();
 
-    const xAxisGenerator = datatype === DataType.Categorical ? d3.axisBottom(xLabelScale) : d3.axisBottom(xScale);
-    svgElement
+    const xAxisGenerator = [DataType.Categorical, DataType.DateTime].includes(dataType) ?
+      d3.axisBottom(xLabelScale) : d3.axisBottom(xScale);
+    svg
       .append("g")
       .attr("transform", "translate(0," + boundsHeight + ")")
       .call(xAxisGenerator);
-    if (datatype === DataType.Categorical && Object.keys(data).length > 10) {
-        svgElement
-            .selectAll("text")  
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", "rotate(-20)")
-            .attr("font-size", "9px")
+    if ([DataType.Categorical, DataType.DateTime].includes(dataType) && Object.keys(data).length > 10) {
+      svg
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-20)")
+        .attr("font-size", "9px")
     }
     const yAxisGenerator = d3.axisLeft(yScale);
-    svgElement
-        .append("g")
-        .call(yAxisGenerator);
-  }, [xScale, yScale, xLabelScale, boundsHeight, datatype, data]);
+    svg
+      .append("g")
+      .call(yAxisGenerator);
+  }, [xScale, yScale, xLabelScale, boundsHeight, dataType, data]);
 
-  const allRects = buckets.map((bucket, i) => {
+  const rectangles = buckets.map((bucket, i) => {
     const { x0, x1 } = bucket;
     if (x0 === undefined || x1 === undefined) {
       return null;
@@ -102,7 +101,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
   });
 
   return (
-    datatype === DataType.Categorical && Object.keys(data).length > 100 ?
+    [DataType.Categorical, DataType.DateTime].includes(dataType) && Object.keys(data).length > 100 ?
       <svg width={width} height={height}>
         <g
           width={boundsWidth}
@@ -128,7 +127,7 @@ export const Renderer = ({ width, height, domain, data, datatype }: RendererProp
           height={boundsHeight}
           transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
         >
-          {allRects}
+          {rectangles}
         </g>
         <g
           width={boundsWidth}
