@@ -144,11 +144,10 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
                 key={key}
                 className={`
                   border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                  m-1 rounded-md px-2 py-1 text-sm
-                  ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                  ${[DataType.Categorical, DataType.Number].includes(schema[idx].type) ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
-                  h-8 whitespace-nowrap text-ellipsis`}
-                disabled={[DataType.Categorical, DataType.Number].includes(schema[idx].type)}
+                  m-1 rounded-md px-2 py-1 text-sm h-8 whitespace-nowrap text-ellipsis
+                  ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}`
+                }
+                hidden={[DataType.Categorical, DataType.Number].includes(schema[idx].type)}
                 onClick={() => setXAxisIdx(idx)}
               >
                 {key}
