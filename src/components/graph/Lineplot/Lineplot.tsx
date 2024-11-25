@@ -20,7 +20,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   const [xAxisIdx, setXAxisIdx] = useState(dateTimeSchema[0]?.index ?? 0);
   const [yAxisIdx, setYAxisIdx] = useState(numberSchema[0]?.index ?? 0);
 
-  const margin = { top: 30, right: 80, bottom: 30, left: 30 };
+  const margin = { top: 30, right: 35, bottom: 30, left: 35 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
