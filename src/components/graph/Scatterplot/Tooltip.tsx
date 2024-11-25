@@ -1,4 +1,4 @@
-import { convertNumberNotation } from "./utils";
+import { convertNumberNotation } from "../../../utils/notation";
 import { Value } from "../../../types/schema";
 
 
@@ -18,7 +18,6 @@ export const Tooltip = ({ interactionData, boundsHeight }: TooltipProps) => {
   if (!interactionData) {
     return null;
   }
-
   return (
     <div
       className="absolute rounded-md bg-black px-4 py-2 text-xs text-white opacity-80"

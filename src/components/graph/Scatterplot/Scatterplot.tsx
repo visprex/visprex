@@ -6,7 +6,7 @@ import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
-import { TooManyRows, MAX_ROWS_TO_DISPLAY }  from '../../errors';
+import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '../../errors';
 import FilterRemover from '../Filters/FilterRemover';
 import FilterSelector from '../Filters/FilterSelector';
 
@@ -201,7 +201,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
       y: transformOps[yTransform](filteredMatrix[yAxisIdx][index] as number)
     })
   );
-  const allShapes = data.map((d, i) => {
+
+  const circles = data.map((d, i) => {
     const values = keys.map((key) =>filteredMatrix[keys.indexOf(key)][i]);
     return (
       <circle
@@ -227,40 +228,40 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   return (
     <div id='scatterplot' className='mx-auto'>
       {
-        allShapes.length > MAX_ROWS_TO_DISPLAY ? <TooManyRows rows={allShapes.length} /> :
+        circles.length > MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT ? <TooManyRows rows={circles.length} /> :
         <>
           <div className="relative my-5">
-              <svg width={width} height={height}>
-                <g
-                  width={boundsWidth}
-                  height={boundsHeight}
-                  transform={`translate(${[margin.left, margin.top].join(",")})`}
-                >
-                  <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
-                  <g transform={`translate(0, ${boundsHeight})`}>
-                    <AxisBottom
-                      xScale={xScale}
-                      pixelsPerTick={40}
-                      height={boundsHeight}
-                    />
-                  </g>
-                  {allShapes}
-                </g>
-              </svg>
-              <div
-                style={{
-                  width: boundsWidth,
-                  height: boundsHeight,
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  pointerEvents: "none",
-                  marginLeft: margin.left,
-                  marginTop: margin.top,
-                }}
+            <svg width={width} height={height}>
+              <g
+                width={boundsWidth}
+                height={boundsHeight}
+                transform={`translate(${[margin.left, margin.top].join(",")})`}
               >
-                <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
-              </div>
+                <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
+                <g transform={`translate(0, ${boundsHeight})`}>
+                  <AxisBottom
+                    xScale={xScale}
+                    pixelsPerTick={40}
+                    height={boundsHeight}
+                  />
+                </g>
+                {circles}
+              </g>
+            </svg>
+            <div
+              style={{
+                width: boundsWidth,
+                height: boundsHeight,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                pointerEvents: "none",
+                marginLeft: margin.left,
+                marginTop: margin.top,
+              }}
+            >
+              <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
+            </div>
           </div>
           <div className='mb-2'>
             <span className='font-semibold text-gray-500 mb-2'>X-Axis</span>
@@ -269,13 +270,13 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 [ScatterTransformTypeX.None, ScatterTransformTypeX.Squared, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
                   <button
                     key={key}
+                    disabled={schema[xAxisIdx].type === DataType.Categorical}
                     className={`
                       border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm
                       ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                       ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
-                    disabled={schema[xAxisIdx].type === 'categorical'}
                     onClick={() => handleTransformX(key)}
                   >
                     {key}
@@ -287,27 +288,30 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div key='x' className='flex overflow-x-auto'>
               {
-                  keys.map((key: string, idx: number ) =>
-                      <button
-                          key={key}
-                          disabled={schema[idx].type === DataType.Categorical}
-                          className={`
-                            border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                            m-1 rounded-md px-2 py-1 text-sm
-                            ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
-                            ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
-                            h-8 whitespace-nowrap text-ellipsis`
-                          }
-                          onClick={() => {
-                              setXAxisIdx(idx)
-                              setXTransform(ScatterTransformTypeX.None)
-                            }
+                keys.map((key: string, idx: number ) =>
+                  <button
+                      key={key}
+                      disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type)}
+                      className={`
+                        border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                        m-1 rounded-md px-2 py-1 text-sm
+                        ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                        ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
+                        ${
+                          [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) ?
+                          'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''
                         }
-                      >
-                        {key}
-                      </button>
-                  )
+                        h-8 whitespace-nowrap text-ellipsis`
+                      }
+                      onClick={() => {
+                          setXAxisIdx(idx)
+                          setXTransform(ScatterTransformTypeX.None)
+                        }
+                    }
+                  >
+                    {key}
+                  </button>
+                )
               }
           </div>
           <div className="border-t my-2"></div>
@@ -338,14 +342,18 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
               keys.map((key: string, idx: number ) =>
                 <button
                   key={key}
+                  disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type)}
                   className={`
                     border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                     m-1 rounded-md px-2 py-1 text-sm
                     ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                     ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
-                    ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
-                    h-8 whitespace-nowrap text-ellipsis`}
-                  disabled={schema[xAxisIdx].type === 'categorical'}
+                    ${
+                      [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) ?
+                      'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''
+                    }
+                    h-8 whitespace-nowrap text-ellipsis`
+                  }
                   onClick={() => {
                     setYAxisIdx(idx)
                     setYTransform(ScatterTransformTypeY.None)
