@@ -137,7 +137,9 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           />
         )}
         <div className='mb-2'>
-          <span className='font-semibold text-gray-500 mb-4'>X-Axis</span>
+          <div className='text-gray-500 mb-2 text-sm'>
+            <span className='font-semibold'>X-Axis</span><span> (DateTime)</span>
+          </div>
           <div key='x' className='flex overflow-x-auto'>
             {keys.map((key: string, idx: number) =>
               <button
@@ -155,8 +157,11 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
             )}
           </div>
         </div>
+        <div className="border-t my-2"></div>
         <div className='mb-2'>
-          <span className='font-semibold text-gray-500 mb-4'>Y-Axis</span>
+          <div className='text-gray-500 mb-2 text-sm'>
+            <span className='font-semibold'>Y-Axis</span><span> (Numerical)</span>
+          </div>
           <div key='y' className="flex overflow-x-auto">
             {keys.map((key: string, idx: number) =>
               <button
