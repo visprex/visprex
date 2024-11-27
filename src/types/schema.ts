@@ -32,8 +32,10 @@ export type DateTimeSchema = {
   index: number,
   key: string
   range: {
-    min: number,
-    max: number,
+    minUnix: number,
+    maxUnix: number,
+    minDateTime: string,
+    maxDateTime: string,
   }
   frequencies: {
     [key: string]: number

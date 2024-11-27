@@ -33,8 +33,10 @@ export function inferSchema(keys: string[], matrix: Value[][]): Schema[] {
         index,
         key,
         range: {
-          min: _.min(values.filter((v) => v > 0)),
-          max: _.max(values.filter((v) => v < dayjs().unix() * 1000)),
+          minUnix: _.min(values.filter((v) => v > 0)),
+          maxUnix: _.max(values.filter((v) => v < dayjs().unix() * 1000)),
+          minDateTime: dayjs(_.min(values.filter((v) => v > 0))).format("YYYY-MM-DD HH:mm:ss"),
+          maxDateTime: dayjs(_.max(values.filter((v) => v < dayjs().unix() * 1000))).format("YYYY-MM-DD HH:mm:ss"),
         },
         frequencies: _.countBy(matrix[index].map((v) => (v === null || v === undefined || v === "") ? "N/A" : v))
       } as DateTimeSchema
