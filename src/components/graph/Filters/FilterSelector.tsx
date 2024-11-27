@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Schema, NumberSchema, CategoricalSchema, DataType, Value } from "../../../types/schema";
-import { Filter, Operator, CategoricalFilter, NumberFilter } from "../../../utils/filters";
+import { Schema, NumberSchema, CategoricalSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
+import { Filter, Operator, CategoricalFilter, NumberFilter, DateTimeFilter } from "../../../utils/filters";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 interface FilterSelectorProps {
@@ -16,7 +16,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
   const selectedSchema = schema.find((s) => s.key === selectedSchemaKey);
 
   useEffect(() => {
-    if (selectedSchema?.type === DataType.Number) {
+    if (selectedSchema?.type === DataType.Number || selectedSchema?.type === DataType.DateTime) {
       const numberSchema = selectedSchema as NumberSchema;
       let defaultValue: number;
 
@@ -33,10 +33,24 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         default:
           defaultValue = numberSchema.range.min;
       }
-
       setInputValue(defaultValue);
     }
+    if (selectedSchema?.type === DataType.DateTime) {
+      const dateTimeSchema = selectedSchema as DateTimeSchema;
+      let defaultValue: string;
 
+      switch (selectedOperator) {
+        case Operator.GreaterThanOrEqual:
+          defaultValue = dateTimeSchema.range.minDateTime;
+          break;
+        case Operator.LessThanOrEqual:
+          defaultValue = dateTimeSchema.range.maxDateTime;
+          break;
+        default:
+          defaultValue = dateTimeSchema.range.minDateTime;
+      }
+      setInputValue(defaultValue);
+    }
     if (selectedSchema?.type === DataType.Categorical) {
       const categoricalSchema = selectedSchema as CategoricalSchema;
       if (!inputValue || !Object.keys(categoricalSchema.frequencies).includes(inputValue as string)) {
@@ -71,20 +85,36 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
 
   const handleApplyFilter = () => {
     if (!selectedSchema) return;
+    let filter: Filter;
 
-    const filter: Filter = selectedSchema.type === DataType.Categorical
-      ? {
-          type: DataType.Categorical,
-          schemaKey: selectedSchemaKey,
-          operator: selectedOperator,
-          value: inputValue as string,
+    switch (selectedSchema.type) {
+      case DataType.Categorical:
+        filter = {
+            type: DataType.Categorical,
+            schemaKey: selectedSchemaKey,
+            operator: selectedOperator,
+            value: inputValue as string,
         } as CategoricalFilter
-      : {
+        break;
+      case DataType.Number:
+        filter = {
           type: DataType.Number,
           schemaKey: selectedSchemaKey,
           operator: selectedOperator,
           value: inputValue as number,
         } as NumberFilter;
+        break;
+      case DataType.DateTime:
+        filter = {
+          type: DataType.DateTime,
+          schemaKey: selectedSchemaKey,
+          operator: selectedOperator,
+          value: inputValue as string,
+        } as DateTimeFilter;
+        break;
+      default:
+        return;
+    }
     onFilterChange(filter);
   };
 
@@ -98,38 +128,60 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
         ))}
       </select>
       <select value={selectedOperator} onChange={handleOperatorChange}>
-        {selectedSchema?.type === DataType.Categorical ? (
-          <>
-            <option value={Operator.Equal}>{Operator.Equal}</option>
-            <option value={Operator.NotEqual}>{Operator.NotEqual}</option>
-          </>
-        ) : (
-          <>
-            <option value={Operator.Equal}>{Operator.Equal}</option>
-            <option value={Operator.NotEqual}>{Operator.NotEqual}</option>
-            <option value={Operator.GreaterThan}>{Operator.GreaterThan}</option>
-            <option value={Operator.GreaterThanOrEqual}>{Operator.GreaterThanOrEqual}</option>
-            <option value={Operator.LessThan}>{Operator.LessThan}</option>
-            <option value={Operator.LessThanOrEqual}>{Operator.LessThanOrEqual}</option>
-          </>
-        )}
+        {
+          selectedSchema?.type === DataType.Categorical ?
+          (
+            <>
+              <option value={Operator.Equal}>{Operator.Equal}</option>
+              <option value={Operator.NotEqual}>{Operator.NotEqual}</option>
+            </>
+          ) : selectedSchema?.type === DataType.DateTime ?
+          (
+            <>
+              <option value={Operator.GreaterThanOrEqual}>{Operator.GreaterThanOrEqual}</option>
+              <option value={Operator.LessThanOrEqual}>{Operator.LessThanOrEqual}</option>
+            </>
+          ) : 
+          (
+            <>
+              <option value={Operator.Equal}>{Operator.Equal}</option>
+              <option value={Operator.NotEqual}>{Operator.NotEqual}</option>
+              <option value={Operator.GreaterThan}>{Operator.GreaterThan}</option>
+              <option value={Operator.GreaterThanOrEqual}>{Operator.GreaterThanOrEqual}</option>
+              <option value={Operator.LessThan}>{Operator.LessThan}</option>
+              <option value={Operator.LessThanOrEqual}>{Operator.LessThanOrEqual}</option>
+            </>
+          )
+        }
       </select>
-      {selectedSchema?.type === DataType.Categorical ? (
-        <select className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto' value={inputValue as string} onChange={handleValueChange}>
-          {Object.keys((selectedSchema as CategoricalSchema).frequencies).map((freqKey) => (
-            <option key={freqKey} value={freqKey}>
-              {freqKey}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto'
-          type="number"
-          value={inputValue}
-          onChange={handleValueChange}
-        />
-      )}
+      {
+        selectedSchema?.type === DataType.Categorical ?
+        (
+          <select className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto' value={inputValue as string} onChange={handleValueChange}>
+            {Object.keys((selectedSchema as CategoricalSchema).frequencies).map((freqKey) => (
+              <option key={freqKey} value={freqKey}>
+                {freqKey}
+              </option>
+            ))}
+          </select>
+        ) : selectedSchema?.type === DataType.DateTime ?
+        (
+          <input
+            className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto'
+            type="datetime-local"
+            value={inputValue}
+            onChange={handleValueChange}
+          />
+        ) :
+        (
+          <input
+            className='border border-gray-300 rounded-md p-1 w-1/3 lg:w-auto'
+            type="number"
+            value={inputValue as number}
+            onChange={handleValueChange}
+          />
+        )
+      }
       <button onClick={handleApplyFilter}><PlusCircleIcon className="text-indigo-500 ml-2 h-6 w-6"/></button>
     </div>
   );
