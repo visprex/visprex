@@ -109,8 +109,8 @@ export const Histogram = ({
           setErrorMessage("");
           break;
         case TransformType.Log10:
-          if (schemaItem.range.min <= -1) {
-            setErrorMessage("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+          if (schemaItem.range.min <= 0) {
+            setErrorMessage("Error: All numbers must be positive for log transform.");
             setCurrentTransform(TransformType.None);
             return;
           }
@@ -119,8 +119,8 @@ export const Histogram = ({
           setErrorMessage("");
           break;
         case TransformType.Log10Plus1:
-          if (schemaItem.range.min+1 <= 0) {
-            setErrorMessage("Error: All numbers must be greater than or equal to 0 for ln(x+1) transform.");
+          if (schemaItem.range.min <= -1) {
+            setErrorMessage("Error: All numbers must be greater than -1 for log10(x+1) transform.");
             setCurrentTransform(TransformType.None);
             return;
           }
