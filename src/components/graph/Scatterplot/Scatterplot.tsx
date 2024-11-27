@@ -51,7 +51,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   const [hovered, setHovered] = useState<InteractionData | null>(null);
 
-  const margin = { top: 30, right: 35, bottom: 30, left: 35 };
+  const margin = { top: 30, right: 35, bottom: 30, left: 40 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
@@ -322,7 +322,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                 [ScatterTransformTypeY.None, ScatterTransformTypeY.Squared, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
                   <button
                     key={key}
-                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[xAxisIdx].type)}
+                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[yAxisIdx].type)}
                     className={`
                       border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm

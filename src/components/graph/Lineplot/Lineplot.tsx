@@ -20,14 +20,14 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   const [xAxisIdx, setXAxisIdx] = useState(dateTimeSchema[0].index);
   const [yAxisIdx, setYAxisIdx] = useState(numberSchema[0].index);
 
-  const margin = { top: 30, right: 35, bottom: 30, left: 35 };
+  const margin = { top: 30, right: 35, bottom: 30, left: 40 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
   const domain = {
     x: [
-      new Date((schema[xAxisIdx] as DateTimeSchema).range.min),
-      new Date((schema[xAxisIdx] as DateTimeSchema).range.max),
+      new Date((schema[xAxisIdx] as DateTimeSchema).range.minUnix),
+      new Date((schema[xAxisIdx] as DateTimeSchema).range.maxUnix),
     ],
     y: [
       (schema[yAxisIdx] as NumberSchema).range.min,
