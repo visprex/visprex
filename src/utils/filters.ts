@@ -24,7 +24,14 @@ export type NumberFilter = {
   value: number;
 };
 
-export type Filter = CategoricalFilter | NumberFilter;
+export type DateTimeFilter = {
+  type: DataType.DateTime;
+  schemaKey: string;
+  operator: Operator;
+  value: string;
+};
+
+export type Filter = CategoricalFilter | NumberFilter | DateTimeFilter;
 
 function applyCategoricalFilter(value: string, filter: CategoricalFilter): boolean {
   switch (filter.operator) {
@@ -56,6 +63,17 @@ function applyNumberFilter(value: number, filter: NumberFilter): boolean {
   }
 }
 
+function applyDateTimeFilter(value: string, filter: DateTimeFilter): boolean {
+  switch (filter.operator) {
+    case Operator.GreaterThanOrEqual:
+        return new Date(value).getTime() >= new Date(filter.value).getTime();
+    case Operator.LessThanOrEqual:
+      return new Date(value).getTime() <= new Date(filter.value).getTime();
+    default:
+      return false;
+  }
+}
+
 export function filterMatrix(matrix: Value[][], filters: Filter[], schema: Schema[]): Value[][] {
   if (filters.length === 0) {
     return matrix;
@@ -67,9 +85,13 @@ export function filterMatrix(matrix: Value[][], filters: Filter[], schema: Schem
         return false;
       }
       const value = row[schemaItem.index];
-      return schemaItem.type === DataType.Categorical 
-        ? applyCategoricalFilter(value as string, f as CategoricalFilter) 
-        : applyNumberFilter(value as number, f as NumberFilter);
+      if (schemaItem.type === DataType.Categorical) {
+        return applyCategoricalFilter(value as string, f as CategoricalFilter)
+      }
+      if (schemaItem.type === DataType.DateTime) {
+        return applyDateTimeFilter(value as string, f as DateTimeFilter);
+      }
+      return applyNumberFilter(value as number, f as NumberFilter);
     });
   })
   if (filteredT.length === 0) {
