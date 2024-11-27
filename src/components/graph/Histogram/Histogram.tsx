@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
-import { logETransform, log10Transform, TransformType, squaredTransform } from "../../../utils/transform";
+import { logETransform, logEPlus1Transform, log10Transform, log10Plus1Transform, TransformType, squaredTransform } from "../../../utils/transform";
 import { Renderer } from "./Renderer";
 
 const BUTTONS_HEIGHT = 50;
@@ -98,9 +98,29 @@ export const Histogram = ({
           setCurrentDomain([Math.log(schemaItem.range.min), Math.log(schemaItem.range.max)]);
           setErrorMessage("");
           break;
+        case TransformType.LnPlus1:
+          if (schemaItem.range.min <= -1) {
+            setErrorMessage("Error: All numbers must be greater than -1 for ln(x+1) transform.");
+            setCurrentTransform(TransformType.None);
+            return;
+          }
+          setSelectedNumberData(logEPlus1Transform(currentData as number[]));
+          setCurrentDomain([Math.log(schemaItem.range.min+1), Math.log(schemaItem.range.max+1)]);
+          setErrorMessage("");
+          break;
         case TransformType.Log10:
-          if (schemaItem.range.min <= 0) {
-            setErrorMessage("Error: All numbers must be positive for log transform.");
+          if (schemaItem.range.min <= -1) {
+            setErrorMessage("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+            setCurrentTransform(TransformType.None);
+            return;
+          }
+          setSelectedNumberData(log10Plus1Transform(currentData as number[]));
+          setCurrentDomain([Math.log10(schemaItem.range.min+1), Math.log10(schemaItem.range.max+1)]);
+          setErrorMessage("");
+          break;
+        case TransformType.Log10Plus1:
+          if (schemaItem.range.min+1 <= 0) {
+            setErrorMessage("Error: All numbers must be greater than or equal to 0 for ln(x+1) transform.");
             setCurrentTransform(TransformType.None);
             return;
           }
@@ -145,7 +165,7 @@ export const Histogram = ({
       <div>
           <span className='ml-5 font-serif font-thin italic'>f(x):</span>
           {
-              [TransformType.None, TransformType.Squared, TransformType.Log10, TransformType.Ln].map((key) => (
+              [TransformType.None, TransformType.Squared, TransformType.Log10, TransformType.Log10Plus1, TransformType.Ln, TransformType.LnPlus1].map((key) => (
                 <button
                   key={key}
                   className={`

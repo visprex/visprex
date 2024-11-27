@@ -10,7 +10,7 @@ interface FilterSelectorProps {
 
 const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange }) => {
   const [selectedSchemaKey, setSelectedSchemaKey] = useState<string>(schema[0]?.key || '');
-  const [selectedOperator, setSelectedOperator] = useState<Operator>(Operator.Equal);
+  const [selectedOperator, setSelectedOperator] = useState<Operator>(Operator.GreaterThanOrEqual);
   const [inputValue, setInputValue] = useState<Value>('');
 
   const selectedSchema = schema.find((s) => s.key === selectedSchemaKey);

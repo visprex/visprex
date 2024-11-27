@@ -13,14 +13,18 @@ import FilterSelector from '../Filters/FilterSelector';
 enum ScatterTransformTypeX {
   None = "x",
   Log10 = "log10(x)",
+  Log10Plus1 = "log10(x+1)",
   Ln = "ln(x)",
+  LnPlus1 = "ln(x+1)",
   Squared = "x²"
 }
 
 enum ScatterTransformTypeY {
   None = "y",
   Log10 = "log10(y)",
+  Log10Plus1 = "log10(y+1)",
   Ln = "ln(y)",
+  LnPlus1 = "ln(y+1)",
   Squared = "y²"
 }
 
@@ -84,6 +88,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setXTransform(ScatterTransformTypeX.Ln);
         setErrorMessageX("");
         break;
+      case ScatterTransformTypeX.LnPlus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageX("Error: All numbers must be greater than -1 for ln(x+1) transform.");
+          setXTransform(ScatterTransformTypeX.None);
+          return;
+        }
+        setXTransform(ScatterTransformTypeX.LnPlus1);
+        setErrorMessageX("");
+        break;
       case ScatterTransformTypeX.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageX("Error: All numbers must be positive for log transform.");
@@ -93,6 +106,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setXTransform(ScatterTransformTypeX.Log10);
         setErrorMessageX("");
         break;
+      case ScatterTransformTypeX.Log10Plus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageX("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+          setXTransform(ScatterTransformTypeX.None);
+          return;
+        }
+        setXTransform(ScatterTransformTypeX.Log10Plus1);
+        setErrorMessageX("");
+        break
       default:
         break;
     }
@@ -121,6 +143,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setYTransform(ScatterTransformTypeY.Ln);
         setErrorMessageY("");
         break;
+      case ScatterTransformTypeY.LnPlus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageY("Error: All numbers must be greater than -1 for ln(x+1) transform.");
+          setYTransform(ScatterTransformTypeY.None);
+          return;
+        }
+        setYTransform(ScatterTransformTypeY.LnPlus1);
+        setErrorMessageY("");
+        break
       case ScatterTransformTypeY.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageY("Error: All numbers must be positive for log transform.");
@@ -130,6 +161,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setYTransform(ScatterTransformTypeY.Log10);
         setErrorMessageY("");
         break;
+      case ScatterTransformTypeY.Log10Plus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageY("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+          setYTransform(ScatterTransformTypeY.None);
+          return;
+        }
+        setYTransform(ScatterTransformTypeY.Log10Plus1);
+        setErrorMessageY("");
+        break
       default:
         break;
     }
@@ -267,7 +307,14 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='font-semibold text-gray-500 mb-2'>X-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
-                [ScatterTransformTypeX.None, ScatterTransformTypeX.Squared, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
+                [
+                  ScatterTransformTypeX.None,
+                  ScatterTransformTypeX.Squared,
+                  ScatterTransformTypeX.Log10,
+                  ScatterTransformTypeX.Log10Plus1,
+                  ScatterTransformTypeX.Ln,
+                  ScatterTransformTypeX.LnPlus1
+                ].map((key) => (
                   <button
                     key={key}
                     disabled={[DataType.Categorical, DataType.DateTime].includes(schema[xAxisIdx].type)}
@@ -319,7 +366,14 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='font-semibold text-gray-500 mb-2'>Y-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(y):</span>
             {
-                [ScatterTransformTypeY.None, ScatterTransformTypeY.Squared, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
+                [
+                  ScatterTransformTypeY.None,
+                  ScatterTransformTypeY.Squared,
+                  ScatterTransformTypeY.Log10,
+                  ScatterTransformTypeY.Log10Plus1,
+                  ScatterTransformTypeY.Ln,
+                  ScatterTransformTypeY.LnPlus1
+                ].map((key) => (
                   <button
                     key={key}
                     disabled={[DataType.Categorical, DataType.DateTime].includes(schema[yAxisIdx].type)}
