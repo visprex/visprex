@@ -33,9 +33,8 @@ export const Tooltip = ({ interactionData, boundsHeight }: TooltipProps) => {
             <b>{key}</b>
             <span>: </span>
             <span>
-            {
-              typeof val === "number" ? convertNumberNotation(val as number) : val.toString() as string
-            }</span>
+            {(val === undefined ||  val === null) ? "N/A" : typeof val === "number" ? convertNumberNotation(val as number) : val.toString()}
+            </span>
           </div>
         )
       })}
