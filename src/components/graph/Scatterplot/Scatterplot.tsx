@@ -6,21 +6,25 @@ import { transformOps } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
-import { TooManyRows, MAX_ROWS_TO_DISPLAY }  from '../../errors';
+import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '../../errors';
 import FilterRemover from '../Filters/FilterRemover';
 import FilterSelector from '../Filters/FilterSelector';
 
 enum ScatterTransformTypeX {
   None = "x",
   Log10 = "log10(x)",
+  Log10Plus1 = "log10(x+1)",
   Ln = "ln(x)",
+  LnPlus1 = "ln(x+1)",
   Squared = "x²"
 }
 
 enum ScatterTransformTypeY {
   None = "y",
   Log10 = "log10(y)",
+  Log10Plus1 = "log10(y+1)",
   Ln = "ln(y)",
+  LnPlus1 = "ln(y+1)",
   Squared = "y²"
 }
 
@@ -51,7 +55,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   const [hovered, setHovered] = useState<InteractionData | null>(null);
 
-  const margin = { top: 30, right: 80, bottom: 30, left: 30 };
+  const margin = { top: 30, right: 35, bottom: 30, left: 40 };
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
@@ -63,7 +67,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   
   function handleTransformX(key: string) {
     const schemaItem = schema[xAxisIdx];
-    if (schemaItem.type === DataType.Categorical) {
+    if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
@@ -84,6 +88,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setXTransform(ScatterTransformTypeX.Ln);
         setErrorMessageX("");
         break;
+      case ScatterTransformTypeX.LnPlus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageX("Error: All numbers must be greater than -1 for ln(x+1) transform.");
+          setXTransform(ScatterTransformTypeX.None);
+          return;
+        }
+        setXTransform(ScatterTransformTypeX.LnPlus1);
+        setErrorMessageX("");
+        break;
       case ScatterTransformTypeX.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageX("Error: All numbers must be positive for log transform.");
@@ -93,6 +106,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setXTransform(ScatterTransformTypeX.Log10);
         setErrorMessageX("");
         break;
+      case ScatterTransformTypeX.Log10Plus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageX("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+          setXTransform(ScatterTransformTypeX.None);
+          return;
+        }
+        setXTransform(ScatterTransformTypeX.Log10Plus1);
+        setErrorMessageX("");
+        break
       default:
         break;
     }
@@ -100,7 +122,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
 
   function handleTransformY (key: string) {
     const schemaItem = schema[yAxisIdx];
-    if (schemaItem.type === DataType.Categorical) {
+    if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
@@ -121,6 +143,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setYTransform(ScatterTransformTypeY.Ln);
         setErrorMessageY("");
         break;
+      case ScatterTransformTypeY.LnPlus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageY("Error: All numbers must be greater than -1 for ln(x+1) transform.");
+          setYTransform(ScatterTransformTypeY.None);
+          return;
+        }
+        setYTransform(ScatterTransformTypeY.LnPlus1);
+        setErrorMessageY("");
+        break
       case ScatterTransformTypeY.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageY("Error: All numbers must be positive for log transform.");
@@ -130,6 +161,15 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
         setYTransform(ScatterTransformTypeY.Log10);
         setErrorMessageY("");
         break;
+      case ScatterTransformTypeY.Log10Plus1:
+        if (schemaItem.range.min <= -1) {
+          setErrorMessageY("Error: All numbers must be greater than -1 for log10(x+1) transform.");
+          setYTransform(ScatterTransformTypeY.None);
+          return;
+        }
+        setYTransform(ScatterTransformTypeY.Log10Plus1);
+        setErrorMessageY("");
+        break
       default:
         break;
     }
@@ -201,7 +241,8 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
       y: transformOps[yTransform](filteredMatrix[yAxisIdx][index] as number)
     })
   );
-  const allShapes = data.map((d, i) => {
+
+  const circles = data.map((d, i) => {
     const values = keys.map((key) =>filteredMatrix[keys.indexOf(key)][i]);
     return (
       <circle
@@ -227,55 +268,62 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
   return (
     <div id='scatterplot' className='mx-auto'>
       {
-        allShapes.length > MAX_ROWS_TO_DISPLAY ? <TooManyRows rows={allShapes.length} /> :
+        circles.length > MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT ? <TooManyRows rows={circles.length} /> :
         <>
           <div className="relative my-5">
-              <svg width={width} height={height}>
-                <g
-                  width={boundsWidth}
-                  height={boundsHeight}
-                  transform={`translate(${[margin.left, margin.top].join(",")})`}
-                >
-                  <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
-                  <g transform={`translate(0, ${boundsHeight})`}>
-                    <AxisBottom
-                      xScale={xScale}
-                      pixelsPerTick={40}
-                      height={boundsHeight}
-                    />
-                  </g>
-                  {allShapes}
-                </g>
-              </svg>
-              <div
-                style={{
-                  width: boundsWidth,
-                  height: boundsHeight,
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  pointerEvents: "none",
-                  marginLeft: margin.left,
-                  marginTop: margin.top,
-                }}
+            <svg width={width} height={height}>
+              <g
+                width={boundsWidth}
+                height={boundsHeight}
+                transform={`translate(${[margin.left, margin.top].join(",")})`}
               >
-                <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
-              </div>
+                <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
+                <g transform={`translate(0, ${boundsHeight})`}>
+                  <AxisBottom
+                    xScale={xScale}
+                    pixelsPerTick={40}
+                    height={boundsHeight}
+                  />
+                </g>
+                {circles}
+              </g>
+            </svg>
+            <div
+              style={{
+                width: boundsWidth,
+                height: boundsHeight,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                pointerEvents: "none",
+                marginLeft: margin.left,
+                marginTop: margin.top,
+              }}
+            >
+              <Tooltip interactionData={hovered} boundsHeight={boundsHeight} />
+            </div>
           </div>
           <div className='mb-2'>
             <span className='font-semibold text-gray-500 mb-2'>X-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
-                [ScatterTransformTypeX.None, ScatterTransformTypeX.Squared, ScatterTransformTypeX.Log10, ScatterTransformTypeX.Ln].map((key) => (
+                [
+                  ScatterTransformTypeX.None,
+                  ScatterTransformTypeX.Squared,
+                  ScatterTransformTypeX.Log10,
+                  ScatterTransformTypeX.Log10Plus1,
+                  ScatterTransformTypeX.Ln,
+                  ScatterTransformTypeX.LnPlus1
+                ].map((key) => (
                   <button
                     key={key}
+                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[xAxisIdx].type)}
                     className={`
                       border ${xTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm
                       ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                       ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
-                    disabled={schema[xAxisIdx].type === 'categorical'}
                     onClick={() => handleTransformX(key)}
                   >
                     {key}
@@ -287,27 +335,30 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
           </div>
           <div key='x' className='flex overflow-x-auto'>
               {
-                  keys.map((key: string, idx: number ) =>
-                      <button
-                          key={key}
-                          disabled={schema[idx].type === DataType.Categorical}
-                          className={`
-                            border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
-                            m-1 rounded-md px-2 py-1 text-sm
-                            ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
-                            ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
-                            ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
-                            h-8 whitespace-nowrap text-ellipsis`
-                          }
-                          onClick={() => {
-                              setXAxisIdx(idx)
-                              setXTransform(ScatterTransformTypeX.None)
-                            }
+                keys.map((key: string, idx: number ) =>
+                  <button
+                      key={key}
+                      disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type)}
+                      className={`
+                        border ${idx === xAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
+                        m-1 rounded-md px-2 py-1 text-sm
+                        ${idx === xAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
+                        ${idx === xAxisIdx ? 'opacity-100' : 'opacity-70'}
+                        ${
+                          [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) ?
+                          'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''
                         }
-                      >
-                        {key}
-                      </button>
-                  )
+                        h-8 whitespace-nowrap text-ellipsis`
+                      }
+                      onClick={() => {
+                          setXAxisIdx(idx)
+                          setXTransform(ScatterTransformTypeX.None)
+                        }
+                    }
+                  >
+                    {key}
+                  </button>
+                )
               }
           </div>
           <div className="border-t my-2"></div>
@@ -315,9 +366,17 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='font-semibold text-gray-500 mb-2'>Y-Axis</span>
             <span className='ml-5 font-serif font-thin italic'>f(y):</span>
             {
-                [ScatterTransformTypeY.None, ScatterTransformTypeY.Squared, ScatterTransformTypeY.Log10, ScatterTransformTypeY.Ln].map((key) => (
+                [
+                  ScatterTransformTypeY.None,
+                  ScatterTransformTypeY.Squared,
+                  ScatterTransformTypeY.Log10,
+                  ScatterTransformTypeY.Log10Plus1,
+                  ScatterTransformTypeY.Ln,
+                  ScatterTransformTypeY.LnPlus1
+                ].map((key) => (
                   <button
                     key={key}
+                    disabled={[DataType.Categorical, DataType.DateTime].includes(schema[yAxisIdx].type)}
                     className={`
                       border ${yTransform === key ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                       m-1 rounded-md px-2 py-1 text-sm
@@ -338,14 +397,18 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
               keys.map((key: string, idx: number ) =>
                 <button
                   key={key}
+                  disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type)}
                   className={`
                     border ${idx === yAxisIdx ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                     m-1 rounded-md px-2 py-1 text-sm
                     ${idx === yAxisIdx ? 'bg-indigo-500' : 'text-indigo-500'}
                     ${idx === yAxisIdx ? 'opacity-100' : 'opacity-70'}
-                    ${schema[idx].type === DataType.Categorical ? 'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''}
-                    h-8 whitespace-nowrap text-ellipsis`}
-                  disabled={schema[xAxisIdx].type === 'categorical'}
+                    ${
+                      [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) ?
+                      'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''
+                    }
+                    h-8 whitespace-nowrap text-ellipsis`
+                  }
                   onClick={() => {
                     setYAxisIdx(idx)
                     setYTransform(ScatterTransformTypeY.None)

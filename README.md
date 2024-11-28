@@ -11,7 +11,7 @@
 ### Loading your dataset
 Your data is processed entirely in your browser without sending your data to any backend servers. The only network calls this application makes are for downloading example datasets from public GCS buckets.
 
-Once you load your CSV file, it will automatically parse your data into either `Categorical` or `Numerical` types
+Once you load your CSV file, it will automatically parse your data into one of `Categorical`, `Number`, or `DateTime` types.
 
 ![schema](https://github.com/user-attachments/assets/d526dfb9-adc6-4028-8b1d-71d96780a7ba)
 

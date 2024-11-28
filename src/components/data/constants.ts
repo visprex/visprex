@@ -21,6 +21,11 @@ export const datasets = [
         reference: "https://www.kaggle.com/datasets/yasserh/housing-prices-dataset",
     },
     {
+        name: "energy-price.csv",
+        description: "FRED Global Price of Energy Index.",
+        reference: "https://fred.stlouisfed.org/series/PNRGINDEXM",
+    },
+    {
         name: "cia_factbook.csv",
         description: "CIA Factbook on Countries (2014)",
         reference: "https://www.openintro.org/data/index.php?data=cia_factbook",

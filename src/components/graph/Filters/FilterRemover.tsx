@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, CategoricalFilter, NumberFilter } from "../../../utils/filters";
+import { Filter, CategoricalFilter, NumberFilter, DateTimeFilter } from "../../../utils/filters";
 import { DataType } from "../../../types/schema";
 import { MinusCircleIcon } from '@heroicons/react/24/outline';
 
@@ -12,8 +12,12 @@ const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }
   const displayFilterValue = (filter: Filter) => {
     if (filter.type === DataType.Categorical) {
       return (filter as CategoricalFilter).value;
-    } else if (filter.type === DataType.Number) {
+    }
+    if (filter.type === DataType.Number) {
       return (filter as NumberFilter).value;
+    }
+    if (filter.type === DataType.DateTime) {
+      return new Date((filter as DateTimeFilter).value).toISOString();
     }
     return '';
   };
