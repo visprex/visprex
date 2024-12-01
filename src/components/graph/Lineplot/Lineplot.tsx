@@ -2,13 +2,15 @@ import { useRef, useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
 import { Tooltip, InteractionData } from './Tooltip';
+import { DateRangeSelector } from './DateRangeSelector';
+import PriceRangeSlider from './PriceSelector';
 
 interface LineplotProps {
-    width: number;
-    height: number;
-    matrix: Value[][];
-    schema: Schema[];
-    keys: string[];
+  width: number;
+  height: number;
+  matrix: Value[][];
+  schema: Schema[];
+  keys: string[];
 }
 
 export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps) => {
@@ -137,6 +139,12 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           />
         )}
         <div className='mb-2'>
+          <span className='text-gray-500 mb-5 text-sm font-semibold'>Time Range Filter</span>
+            <DateRangeSelector
+              min={(schema[xAxisIdx] as DateTimeSchema).range.minUnix}
+              max={(schema[xAxisIdx] as DateTimeSchema).range.maxUnix}
+            />
+          <hr className='border-t my-2' />
           <div className='text-gray-500 mb-2 text-sm'>
             <span className='font-semibold'>X-Axis</span><span> (DateTime)</span>
           </div>
