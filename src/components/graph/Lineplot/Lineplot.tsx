@@ -2,13 +2,14 @@ import { useRef, useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
 import { Tooltip, InteractionData } from './Tooltip';
+import { DateTimeRangeSelector } from '../../query';
 
 interface LineplotProps {
-    width: number;
-    height: number;
-    matrix: Value[][];
-    schema: Schema[];
-    keys: string[];
+  width: number;
+  height: number;
+  matrix: Value[][];
+  schema: Schema[];
+  keys: string[];
 }
 
 export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps) => {
@@ -24,7 +25,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   const boundsWidth = width - margin.left - margin.right;
   const boundsHeight = height - margin.top - margin.bottom;
 
-  const domain = {
+  const initialDomain = {
     x: [
       new Date((schema[xAxisIdx] as DateTimeSchema).range.minUnix),
       new Date((schema[xAxisIdx] as DateTimeSchema).range.maxUnix),
@@ -33,18 +34,20 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
       (schema[yAxisIdx] as NumberSchema).range.min,
       (schema[yAxisIdx] as NumberSchema).range.max,
     ],
-  };
-
-  const xScale = d3.scaleTime()
-    .domain(domain.x)
-    .range([0, boundsWidth]);
-
-  const yScale = d3.scaleLinear()
-    .domain(domain.y)
-    .range([boundsHeight, 0]);
+  }
   
-  useEffect(() => {
+  const yScale = d3.scaleLinear()
+    .domain(initialDomain.y)
+    .range([boundsHeight, 0]);
+
+  const [xDomain, setXDomain] = useState<Date[]>(initialDomain.x);
+
+  useEffect(() => {    
     if (lineRef.current) {
+      const xScale = d3.scaleTime()
+        .domain(xDomain)
+        .range([0, boundsWidth]);
+
       const svg = d3.select(lineRef.current);
       svg.selectAll('*').remove();
   
@@ -73,8 +76,13 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           x: new Date(xValue as string),
           y: matrix[yAxisIdx][index] as number,
         }
-      )).filter((d) => !isNaN(d.x.getTime()) && typeof d.y === 'number');
-  
+      )).filter((d) => 
+        !isNaN(d.x.getTime()) &&
+        d.x.getTime() >= xScale.domain()[0].getTime() &&
+        d.x.getTime() <= xScale.domain()[1].getTime() &&
+        typeof d.y === 'number'
+      );
+
       plot.append('path')
         .datum(data)
         .attr('fill', 'none')
@@ -105,7 +113,12 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           const index = bisect(data, x0, 1);
           const d0 = data[index - 1];
           const d1 = data[index];
-          const closestPoint = d0 && d1 ? (x0.getTime() - d0.x.getTime() <= d1.x.getTime() - x0.getTime() ? d0 : d1) : d0 || d1;
+          const closestPoint = (
+            d0 && d1 ?
+              (x0.getTime() - d0.x.getTime() <= d1.x.getTime() - x0.getTime()
+                ? d0 : d1
+              ) : d0 || d1
+          );
 
           if (closestPoint) {
             setHovered({
@@ -125,7 +138,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xAxisIdx, yAxisIdx]);
+  }, [xAxisIdx, yAxisIdx, xDomain]);
     
   return (
     <div id='Lineplot' className='mx-auto'>
@@ -137,6 +150,17 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           />
         )}
         <div className='mb-2'>
+          <span className='text-gray-500 text-sm font-semibold'>Time Range Filter</span>
+            <DateTimeRangeSelector
+              domain={
+                {
+                  min: initialDomain.x[0].getTime(),
+                  max: initialDomain.x[1].getTime(),
+                }
+              }
+              onChange={setXDomain}
+            />
+          <hr className='border-t my-2' />
           <div className='text-gray-500 mb-2 text-sm'>
             <span className='font-semibold'>X-Axis</span><span> (DateTime)</span>
           </div>

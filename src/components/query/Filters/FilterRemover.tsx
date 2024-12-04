@@ -8,7 +8,7 @@ interface FilterRemoverProps {
   onRemoveFilter: (index: number) => void;
 }
 
-const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }) => {
+export const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }) => {
   const displayFilterValue = (filter: Filter) => {
     if (filter.type === DataType.Categorical) {
       return (filter as CategoricalFilter).value;
@@ -39,5 +39,3 @@ const FilterRemover: React.FC<FilterRemoverProps> = ({ filters, onRemoveFilter }
     </div>
   );
 };
-
-export default FilterRemover;

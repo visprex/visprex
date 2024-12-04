@@ -8,7 +8,7 @@ interface FilterSelectorProps {
   onFilterChange: (filter: Filter) => void;
 }
 
-const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange }) => {
+export const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange }) => {
   const [selectedSchemaKey, setSelectedSchemaKey] = useState<string>(schema[0]?.key || '');
   const [selectedOperator, setSelectedOperator] = useState<Operator>(Operator.GreaterThanOrEqual);
   const [inputValue, setInputValue] = useState<Value>('');
@@ -186,5 +186,3 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ schema, onFilterChange 
     </div>
   );
 };
-
-export default FilterSelector;

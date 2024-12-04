@@ -7,8 +7,7 @@ import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '../../errors';
-import FilterRemover from '../Filters/FilterRemover';
-import FilterSelector from '../Filters/FilterSelector';
+import { FilterSelector, FilterRemover } from '../../query/';
 
 enum ScatterTransformTypeX {
   None = "x",
