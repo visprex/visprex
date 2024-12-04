@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
 import { Tooltip, InteractionData } from './Tooltip';
 import { DateTimeRangeSelector } from '../../query';
+import _ from 'lodash';
 
 interface LineplotProps {
   width: number;
@@ -36,17 +37,31 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
     ],
   }
   
-  const yScale = d3.scaleLinear()
-    .domain(initialDomain.y)
-    .range([boundsHeight, 0]);
-
   const [xDomain, setXDomain] = useState<Date[]>(initialDomain.x);
 
   useEffect(() => {    
     if (lineRef.current) {
+      const data = matrix[xAxisIdx].map((xValue, index) => (
+        {
+          x: new Date(xValue as string),
+          y: matrix[yAxisIdx][index] as number,
+        }
+      )).filter((d) => 
+        !isNaN(d.x.getTime()) &&
+        d.x.getTime() >= xDomain[0].getTime() &&
+        d.x.getTime() <= xDomain[1].getTime() &&
+        typeof d.y === 'number'
+      );
+
       const xScale = d3.scaleTime()
         .domain(xDomain)
         .range([0, boundsWidth]);
+
+      const yDomain = [_.min(data.map(d => d.y)), _.max(data.map(d => d.y))] as [number, number];
+
+      const yScale = d3.scaleLinear()
+        .domain(yDomain)
+        .range([boundsHeight, 0]);
 
       const svg = d3.select(lineRef.current);
       svg.selectAll('*').remove();
@@ -70,18 +85,6 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         .x(d => xScale(d.x))
         .y(d => yScale(d.y))
         .curve(d3.curveMonotoneX);
-  
-      const data = matrix[xAxisIdx].map((xValue, index) => (
-        {
-          x: new Date(xValue as string),
-          y: matrix[yAxisIdx][index] as number,
-        }
-      )).filter((d) => 
-        !isNaN(d.x.getTime()) &&
-        d.x.getTime() >= xScale.domain()[0].getTime() &&
-        d.x.getTime() <= xScale.domain()[1].getTime() &&
-        typeof d.y === 'number'
-      );
 
       plot.append('path')
         .datum(data)
