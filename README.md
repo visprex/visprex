@@ -31,8 +31,8 @@ There are also built-in feature transformation methods (square, natural log, log
 > Reference: [Understand feature distributions](https://docs.visprex.com/features/histogram/)
 
 
-#### Scatterplot
-You can choose two variables to visualise on a 2D scatterplot. The first variable you choose will appear on the X-axis, and the second will appear on the Y-axis.
+#### Scatter Plot
+You can choose two variables to visualise on a 2D scatter plot. The first variable you choose will appear on the X-axis, and the second will appear on the Y-axis.
 
 Hovering over individual points will show you the details of that instance.
 
@@ -43,6 +43,13 @@ You can optionally add **filters** to control for certain variable values or loo
 ![filters](https://github.com/user-attachments/assets/509b56d2-4a05-45e3-907c-e6bee4d6859e)
 
 > Reference: [Visualise linear relationships](https://docs.visprex.com/features/scatterplot/)
+
+#### Line Plot
+Line plot can visualise the trends and seasonality of your `Numerical` features. Only `DateTime` features will be available in the X-axis. Hovering over the line plot will display the values at that point in time.
+
+![lineplot](https://github.com/user-attachments/assets/dfb3f76f-d6f0-4c97-8c61-788e36fe1f65)
+
+> Reference: [Identify trends and seasonality over time](https://docs.visprex.com/features/lineplot/)
 
 
 #### Correlation Matrix
