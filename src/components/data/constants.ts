@@ -17,13 +17,18 @@ export const datasets = [
     },
     {
         name: "housing.csv",
-        description: "Kaggle Housing Prices Dataset.",
+        description: "Kaggle Housing Prices Dataset",
         reference: "https://www.kaggle.com/datasets/yasserh/housing-prices-dataset",
     },
     {
         name: "energy-price.csv",
-        description: "FRED Global Price of Energy Index.",
+        description: "FRED - Global Price of Energy Index (2016=100)",
         reference: "https://fred.stlouisfed.org/series/PNRGINDEXM",
+    },
+    {
+        name: "restaurant-sales.csv",
+        description: "FRED - Retail Monthly Sales: Restaurants (in USD Millions)",
+        reference: "https://fred.stlouisfed.org/series/MRTSSM7225USN",
     },
     {
         name: "cia_factbook.csv",
@@ -32,17 +37,17 @@ export const datasets = [
     },
     {
         name: "world-dataset-2023.csv",
-        description: "World data statistics dataset (Kaggle, 2023).",
+        description: "World data statistics dataset (Kaggle, 2023)",
         reference: "https://www.kaggle.com/fernandol/countries-of-the-world",
     },
     {
         name: "nba-2023-24.csv",
-        description: "NBA player statistics in the 2023-24 regular season (Basketball Reference, 2024).",
+        description: "NBA player statistics in the 2023-24 regular season (Basketball Reference, 2024)",
         reference: "https://www.basketball-reference.com/leagues/NBA_2024_per_game.html",
     },
     {
         name: "fpl-2023-24.csv",
-        description: "Fantasy Premier League players data in the 2023-24 season (Vaastav Anand, 2022).",
+        description: "Fantasy Premier League players data in the 2023-24 season (Vaastav Anand, 2022)",
         reference: "https://github.com/vaastav/Fantasy-Premier-League",
     },
 ]
