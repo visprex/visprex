@@ -42,7 +42,7 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
           setMinVal(value);
           onChange([new Date(value), new Date(maxVal)]);
         }}
-        className={`thumb z-[${minVal > domain.max ? "5": "3"}]`}
+        className="thumb z-[1]"
       />
       <input
         type="range"
@@ -54,11 +54,11 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
           setMaxVal(value);
           onChange([new Date(minVal), new Date(value)]);
         }}
-        className="thumb z-[4]"
+        className="thumb z-[2]"
       />
       <div className="relative w-[350px]">
-        <div className="absolute z-[1] bg-gray-300 w-full h-1 border-r-3" />
-        <div ref={range} className="absolute z-[2] bg-indigo-400 h-1 border-r-3" />
+        <div className="absolute bg-gray-300 w-full h-1 border-r-3" />
+        <div ref={range} className="absolute bg-indigo-400 h-1 border-r-3" />
         <div className="absolute left-1 text-gray-500 text-xs mt-5">
           {new Date(minVal).toISOString()}
         </div>
