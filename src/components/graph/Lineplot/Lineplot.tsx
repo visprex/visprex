@@ -76,8 +76,13 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
           x: new Date(xValue as string),
           y: matrix[yAxisIdx][index] as number,
         }
-      )).filter((d) => !isNaN(d.x.getTime()) && typeof d.y === 'number');
-  
+      )).filter((d) => 
+        !isNaN(d.x.getTime()) &&
+        d.x.getTime() >= xScale.domain()[0].getTime() &&
+        d.x.getTime() <= xScale.domain()[1].getTime() &&
+        typeof d.y === 'number'
+      );
+
       plot.append('path')
         .datum(data)
         .attr('fill', 'none')
