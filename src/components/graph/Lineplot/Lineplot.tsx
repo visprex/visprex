@@ -51,7 +51,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         d.x.getTime() >= xDomain[0].getTime() &&
         d.x.getTime() <= xDomain[1].getTime() &&
         typeof d.y === 'number'
-      );
+      ).sort((p1, p2) => p1.x.getTime() - p2.x.getTime());
 
       const xScale = d3.scaleTime()
         .domain(xDomain)
