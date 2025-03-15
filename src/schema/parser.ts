@@ -1,4 +1,4 @@
-import { DataType, Schema, CategoricalSchema, NumberSchema, DateTimeSchema, Value } from '../types/schema';
+import { DataType, Schema, CategoricalSchema, NumberSchema, DateTimeSchema, Value } from './schema';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Schema, NumberSchema, CategoricalSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
-import { Filter, Operator, CategoricalFilter, NumberFilter, DateTimeFilter } from "../../../utils/filters";
+import { Schema, NumberSchema, CategoricalSchema, DateTimeSchema, DataType, Value } from "@/schema";
+import { Filter, Operator, CategoricalFilter, NumberFilter, DateTimeFilter } from "@/utils/filters";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 interface FilterSelectorProps {

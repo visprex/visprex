@@ -1,5 +1,5 @@
 import React from 'react';
-import { Schema } from '../../types/schema';
+import { Schema } from '@/schema';
 
 interface DataCardProps {
   schema: Schema[]

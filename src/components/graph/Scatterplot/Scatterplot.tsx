@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
-import { Filter, filterMatrix } from "../../../utils/filters";
-import { transformOps, TransformType } from "../../../utils/transform";
+import { Schema, NumberSchema, DataType, Value } from "@/schema";
+import { Filter, filterMatrix } from "@/utils/filters";
+import { transformOps, TransformType } from "@/utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
-import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '../../errors';
-import { FilterSelector, FilterRemover } from '../../query/';
+import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '@/components/errors';
+import { FilterSelector, FilterRemover } from '@/components/query/';
 
 interface ScatterplotProps {
   width: number;
@@ -70,7 +70,7 @@ export const Scatterplot = ({
   useEffect(() => {
     setFilteredMatrix(filterMatrix(matrix, filters, schema));
   }, [matrix, filters, schema]);
-  
+
   function handleXTransform(key: string) {
     const schemaItem = schema[xAxisIdx];
     if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {

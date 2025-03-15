@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 import * as d3 from 'd3';
-import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "../../../types/schema";
+import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "@/schema";
 import { Tooltip, InteractionData } from './Tooltip';
-import { DateTimeRangeSelector } from '../../query';
+import { DateTimeRangeSelector } from '@/components/query';
 import _ from 'lodash';
 
 interface LineplotProps {
