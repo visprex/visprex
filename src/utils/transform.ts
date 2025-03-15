@@ -1,4 +1,4 @@
-import { Value } from "../types/schema";
+import { Value } from "@/schema";
 
 export enum TransformType {
     None = "x",
