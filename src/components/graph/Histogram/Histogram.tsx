@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
-import { logETransform, logEPlus1Transform, log10Transform, log10Plus1Transform, TransformType, squaredTransform } from "../../../utils/transform";
+import { Schema, NumberSchema, DataType, Value } from "@/schema";
+import { logETransform, logEPlus1Transform, log10Transform, log10Plus1Transform, TransformType, squaredTransform } from "@/utils/transform";
 import { Renderer } from "./Renderer";
 
 const BUTTONS_HEIGHT = 50;

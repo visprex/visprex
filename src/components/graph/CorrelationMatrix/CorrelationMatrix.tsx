@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Schema, Value } from "../../../types/schema";
-import { calculateCorrelations, Correlation } from '../../../utils/stats';
+import { Schema, Value } from "@/schema";
+import { calculateCorrelations, Correlation } from '@/core';
 import { Tooltip } from './Tooltip';
 import { Renderer } from './Renderer';
 

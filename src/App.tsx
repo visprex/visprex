@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { DataType, Schema, Value } from './types/schema';
+import { DataType, Schema, Value, inferSchema } from '@/schema';
 import { Dataloader, DataCard } from './components/data';
 import { NavBar } from './components/navigation';
 import { NoDatasetSelected, NoDateTimeDetected, NoNumericalColumnsForLineplot, NotEnoughNumericalColumns} from './components/errors';
 import { Histogram, Scatterplot, CorrelationMatrix, Lineplot } from './components/graph';
-import { classNames, transpose, inferSchema } from './utils';
+import { classNames, transpose } from './utils';
 import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 
 export default function App() {

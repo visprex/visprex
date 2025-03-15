@@ -1,6 +1,6 @@
 import React from 'react';
-import { Filter, CategoricalFilter, NumberFilter, DateTimeFilter } from "../../../utils/filters";
-import { DataType } from "../../../types/schema";
+import { Filter, CategoricalFilter, NumberFilter, DateTimeFilter } from "@/utils/filters";
+import { DataType } from "@/schema";
 import { MinusCircleIcon } from '@heroicons/react/24/outline';
 
 interface FilterRemoverProps {

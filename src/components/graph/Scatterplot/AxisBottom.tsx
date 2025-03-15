@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ScaleLinear } from "d3";
-import { convertNumberNotation } from "../../../utils/notation";
+import { convertNumberNotation } from "@/utils/notation";
 
 type AxisBottomProps = {
   xScale: ScaleLinear<number, number>;
