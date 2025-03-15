@@ -33,7 +33,7 @@ export function squaredTransform(array: number[]): number[] {
     return array.map((value: number) => value ** 2);
 }
 
-export const transformOps: {[key: string]: (x: number) => number}= {
+export const transformOps: {[key: string]: (x: number) => number} = {
     "x": (x: number) => x,
     "y": (x: number) => x,
     "x²": (x: number) => x ** 2,
