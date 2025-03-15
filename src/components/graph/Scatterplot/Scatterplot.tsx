@@ -2,50 +2,57 @@ import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Schema, NumberSchema, DataType, Value } from "../../../types/schema";
 import { Filter, filterMatrix } from "../../../utils/filters";
-import { transformOps } from "../../../utils/transform";
+import { transformOps, TransformType } from "../../../utils/transform";
 import { Tooltip, InteractionData } from './Tooltip';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { TooManyRows, MAX_ROWS_TO_DISPLAY_FOR_SCATTERPLOT }  from '../../errors';
 import { FilterSelector, FilterRemover } from '../../query/';
 
-enum ScatterTransformTypeX {
-  None = "x",
-  Log10 = "log10(x)",
-  Log10Plus1 = "log10(x+1)",
-  Ln = "ln(x)",
-  LnPlus1 = "ln(x+1)",
-  Squared = "x²"
-}
-
-enum ScatterTransformTypeY {
-  None = "y",
-  Log10 = "log10(y)",
-  Log10Plus1 = "log10(y+1)",
-  Ln = "ln(y)",
-  LnPlus1 = "ln(y+1)",
-  Squared = "y²"
-}
-
 interface ScatterplotProps {
-    width: number;
-    height: number;
-    matrix: Value[][];
-    schema: Schema[],
-    keys: string[]
+  width: number;
+  height: number;
+  matrix: Value[][];
+  schema: Schema[],
+  keys: string[]
 }
 
-export const Scatterplot = ({ width, height, matrix, schema, keys } : ScatterplotProps) => {
+const displayTransform = (transform: TransformType, axis: string) => {
+  switch (transform) {
+    case TransformType.None:
+      return axis;
+    case TransformType.Squared:
+      return `${axis}²`;
+    case TransformType.Ln:
+      return `ln(${axis})`;
+    case TransformType.LnPlus1:
+      return `ln(${axis}+1)`;
+    case TransformType.Log10:
+      return `log10(${axis})`;
+    case TransformType.Log10Plus1:
+      return `log10(${axis}+1)`;
+    default:
+      return axis;
+  }
+}
+
+export const Scatterplot = ({
+  width,
+  height,
+  matrix,
+  schema,
+  keys,
+} : ScatterplotProps) => {
   const scatterRef = useRef<SVGSVGElement>(null);
   const numberSchema = schema.filter((schemaItem) => schemaItem.type === DataType.Number) as NumberSchema[];
-
+  
   const [filters, setFilters] = useState<Filter[]>([]);
 
   const [xAxisIdx, setXAxisIdx] = useState(numberSchema[0].index);
   const [yAxisIdx, setYAxisIdx] = useState(numberSchema[1].index);
 
-  const [xTransform, setXTransform] = useState(ScatterTransformTypeX.None);
-  const [yTransform, setYTransform] = useState(ScatterTransformTypeY.None);
+  const [xTransform, setXTransform] = useState(TransformType.None);
+  const [yTransform, setYTransform] = useState(TransformType.None);
   
   const [errorMessageX, setErrorMessageX] = useState("");
   const [errorMessageY, setErrorMessageY] = useState("");
@@ -64,54 +71,54 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
     setFilteredMatrix(filterMatrix(matrix, filters, schema));
   }, [matrix, filters, schema]);
   
-  function handleTransformX(key: string) {
+  function handleXTransform(key: string) {
     const schemaItem = schema[xAxisIdx];
     if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
-      case ScatterTransformTypeX.None:
-        setXTransform(ScatterTransformTypeX.None);
+      case TransformType.None:
+        setXTransform(TransformType.None);
         setErrorMessageX("");
         break;
-      case ScatterTransformTypeX.Squared:
-        setXTransform(ScatterTransformTypeX.Squared);
+      case TransformType.Squared:
+        setXTransform(TransformType.Squared);
         setErrorMessageX("");
         break;
-      case ScatterTransformTypeX.Ln:
+      case TransformType.Ln:
         if (schemaItem.range.min <= 0) {
           setErrorMessageX("Error: All numbers must be positive for log transform.");
-          setXTransform(ScatterTransformTypeX.None);
+          setXTransform(TransformType.None);
           return;
         }
-        setXTransform(ScatterTransformTypeX.Ln);
+        setXTransform(TransformType.Ln);
         setErrorMessageX("");
         break;
-      case ScatterTransformTypeX.LnPlus1:
+      case TransformType.LnPlus1:
         if (schemaItem.range.min <= -1) {
           setErrorMessageX("Error: All numbers must be greater than -1 for ln(x+1) transform.");
-          setXTransform(ScatterTransformTypeX.None);
+          setXTransform(TransformType.None);
           return;
         }
-        setXTransform(ScatterTransformTypeX.LnPlus1);
+        setXTransform(TransformType.LnPlus1);
         setErrorMessageX("");
         break;
-      case ScatterTransformTypeX.Log10:
+      case TransformType.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageX("Error: All numbers must be positive for log transform.");
-          setXTransform(ScatterTransformTypeX.None);
+          setXTransform(TransformType.None);
           return;
         }
-        setXTransform(ScatterTransformTypeX.Log10);
+        setXTransform(TransformType.Log10);
         setErrorMessageX("");
         break;
-      case ScatterTransformTypeX.Log10Plus1:
+      case TransformType.Log10Plus1:
         if (schemaItem.range.min <= -1) {
           setErrorMessageX("Error: All numbers must be greater than -1 for log10(x+1) transform.");
-          setXTransform(ScatterTransformTypeX.None);
+          setXTransform(TransformType.None);
           return;
         }
-        setXTransform(ScatterTransformTypeX.Log10Plus1);
+        setXTransform(TransformType.Log10Plus1);
         setErrorMessageX("");
         break
       default:
@@ -119,54 +126,54 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
     }
   }
 
-  function handleTransformY (key: string) {
+  function handleYTransform (key: string) {
     const schemaItem = schema[yAxisIdx];
     if (schemaItem.type === DataType.Categorical || schemaItem.type === DataType.DateTime) {
       return;
     }
     switch (key) {
-      case ScatterTransformTypeY.None:
-        setYTransform(ScatterTransformTypeY.None);
+      case TransformType.None:
+        setYTransform(TransformType.None);
         setErrorMessageY("");
         break;
-      case ScatterTransformTypeY.Squared:
-        setYTransform(ScatterTransformTypeY.Squared);
+      case TransformType.Squared:
+        setYTransform(TransformType.Squared);
         setErrorMessageY("");
         break;
-      case ScatterTransformTypeY.Ln:
+      case TransformType.Ln:
         if (schemaItem.range.min <= 0) {
           setErrorMessageY("Error: All numbers must be positive for log transform.");
-          setYTransform(ScatterTransformTypeY.None);
+          setYTransform(TransformType.None);
           return;
         }
-        setYTransform(ScatterTransformTypeY.Ln);
+        setYTransform(TransformType.Ln);
         setErrorMessageY("");
         break;
-      case ScatterTransformTypeY.LnPlus1:
+      case TransformType.LnPlus1:
         if (schemaItem.range.min <= -1) {
           setErrorMessageY("Error: All numbers must be greater than -1 for ln(x+1) transform.");
-          setYTransform(ScatterTransformTypeY.None);
+          setYTransform(TransformType.None);
           return;
         }
-        setYTransform(ScatterTransformTypeY.LnPlus1);
+        setYTransform(TransformType.LnPlus1);
         setErrorMessageY("");
         break
-      case ScatterTransformTypeY.Log10:
+      case TransformType.Log10:
         if (schemaItem.range.min <= 0) {
           setErrorMessageY("Error: All numbers must be positive for log transform.");
-          setYTransform(ScatterTransformTypeY.None);
+          setYTransform(TransformType.None);
           return;
         }
-        setYTransform(ScatterTransformTypeY.Log10);
+        setYTransform(TransformType.Log10);
         setErrorMessageY("");
         break;
-      case ScatterTransformTypeY.Log10Plus1:
+      case TransformType.Log10Plus1:
         if (schemaItem.range.min <= -1) {
           setErrorMessageY("Error: All numbers must be greater than -1 for log10(x+1) transform.");
-          setYTransform(ScatterTransformTypeY.None);
+          setYTransform(TransformType.None);
           return;
         }
-        setYTransform(ScatterTransformTypeY.Log10Plus1);
+        setYTransform(TransformType.Log10Plus1);
         setErrorMessageY("");
         break
       default:
@@ -307,12 +314,12 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='ml-5 font-serif font-thin italic'>f(x):</span>
             {
                 [
-                  ScatterTransformTypeX.None,
-                  ScatterTransformTypeX.Squared,
-                  ScatterTransformTypeX.Log10,
-                  ScatterTransformTypeX.Log10Plus1,
-                  ScatterTransformTypeX.Ln,
-                  ScatterTransformTypeX.LnPlus1
+                  TransformType.None,
+                  TransformType.Squared,
+                  TransformType.Log10,
+                  TransformType.Log10Plus1,
+                  TransformType.Ln,
+                  TransformType.LnPlus1
                 ].map((key) => (
                   <button
                     key={key}
@@ -323,9 +330,9 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                       ${xTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                       ${xTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
-                    onClick={() => handleTransformX(key)}
+                    onClick={() => handleXTransform(key)}
                   >
-                    {key}
+                    {displayTransform(key, "x")}
                   </button>
                 )
               )
@@ -351,7 +358,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                       }
                       onClick={() => {
                           setXAxisIdx(idx)
-                          setXTransform(ScatterTransformTypeX.None)
+                          setXTransform(TransformType.None)
                         }
                     }
                   >
@@ -366,12 +373,12 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
             <span className='ml-5 font-serif font-thin italic'>f(y):</span>
             {
                 [
-                  ScatterTransformTypeY.None,
-                  ScatterTransformTypeY.Squared,
-                  ScatterTransformTypeY.Log10,
-                  ScatterTransformTypeY.Log10Plus1,
-                  ScatterTransformTypeY.Ln,
-                  ScatterTransformTypeY.LnPlus1
+                  TransformType.None,
+                  TransformType.Squared,
+                  TransformType.Log10,
+                  TransformType.Log10Plus1,
+                  TransformType.Ln,
+                  TransformType.LnPlus1
                 ].map((key) => (
                   <button
                     key={key}
@@ -382,9 +389,9 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                       ${yTransform === key ? 'bg-indigo-500' : 'text-indigo-500'}
                       ${yTransform === key ? 'opacity-100' : 'opacity-70'}`
                     }
-                    onClick={() => handleTransformY(key)}
+                    onClick={() => handleYTransform(key)}
                   >
-                    {key}
+                    {displayTransform(key, "y")}
                   </button>
                 )
               )
@@ -410,7 +417,7 @@ export const Scatterplot = ({ width, height, matrix, schema, keys } : Scatterplo
                   }
                   onClick={() => {
                     setYAxisIdx(idx)
-                    setYTransform(ScatterTransformTypeY.None)
+                    setYTransform(TransformType.None)
                   }}
                 >
                   {key}
