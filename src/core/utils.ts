@@ -17,5 +17,3 @@ export function generateIdentityMatrix(n: number): number[][] {
     Array.from({ length: n }, (_, j) => i === j ? 1 : 0)
   );
 }
-
-
