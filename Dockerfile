@@ -1,4 +1,18 @@
-FROM alpine:latest AS builder
+# Stage 1: Build App
+FROM node:18-alpine AS vite-builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+
+RUN npm ci --only=production
+
+COPY . .
+
+RUN npm run build
+
+# Stage 2: Build Nginx
+FROM alpine:latest AS nginx-builder
 
 RUN apk add --no-cache \
     build-base \
@@ -13,7 +27,8 @@ RUN apk add --no-cache \
     perl \
     gnupg \
     brotli-dev \
-    git
+    git \
+    nodejs
 
 ENV NGINX_VERSION=1.25.4
 ENV NGINX_BUILD_DIR=/usr/local/src/nginx
@@ -53,6 +68,8 @@ RUN cd $NGINX_BUILD_DIR \
     && make -j$(nproc) \
     && make install
 
+
+# Stage 3: Serve
 FROM alpine:latest
 
 RUN apk add --no-cache \
@@ -61,8 +78,8 @@ RUN apk add --no-cache \
     openssl \
     brotli
 
-COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
-COPY --from=builder /etc/nginx /etc/nginx
+COPY --from=nginx-builder /usr/sbin/nginx /usr/sbin/nginx
+COPY --from=nginx-builder /etc/nginx /etc/nginx
 
 RUN mkdir -p /usr/share/nginx/html \
     && mkdir -p /var/log/nginx \
@@ -75,7 +92,7 @@ RUN mkdir -p /usr/share/nginx/html \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY dist/ /usr/share/nginx/html/
+COPY --from=vite-builder /app/dist /usr/share/nginx/html/
 
 RUN chmod -R 755 /usr/share/nginx/html \
     && chown -R root:root /usr/share/nginx/html
