@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import * as d3 from "d3";
+import { scaleBand, scaleLinear } from "d3";
 import { InteractionData } from "./CorrelationMatrix";
 
 type RendererProps = {
@@ -25,22 +25,20 @@ export const Renderer = ({
   const domain = Array.from(new Set(data.map(function(d) { return d.x })))
 
   const xScale = useMemo(() => {
-    return d3
-      .scaleBand()
+    return scaleBand()
       .range([0, boundsWidth])
       .domain(allXGroups)
       .padding(0.01);
   }, [allXGroups, boundsWidth]);
 
   const yScale = useMemo(() => {
-    return d3
-      .scaleBand()
+    return scaleBand()
       .range([0, boundsHeight])
       .domain(allYGroups)
       .padding(0.01);
   }, [allYGroups, boundsHeight]);
 
-const colorScale = d3.scaleLinear<string>()
+const colorScale = scaleLinear<string>()
     .domain([-1, 0, 1])
     .range(["#B22222", "#fff", "#000080"]);
 

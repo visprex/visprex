@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import * as d3 from "d3";
+import { scaleBand, scaleLinear, bin, select, axisBottom, axisLeft } from "d3";
 import { Rectangle } from "./Rectangle";
 import { DataType } from "@/schema";
 
@@ -22,17 +22,16 @@ export const Renderer = ({ width, height, domain, data, dataType }: RendererProp
   
   const xLabelScale = useMemo(() => {
     if (dataType === DataType.Number) {
-      return d3.scaleBand()
+      return scaleBand()
     }
-    return d3
-      .scaleBand()
+    return scaleBand()
       .range([0, boundsWidth])
       .domain(Object.keys(data))
       .padding(0.2);
   }, [data, boundsWidth, dataType]);
 
   const xScale = useMemo(() => {
-    return d3.scaleLinear().domain(domain).range([10, boundsWidth]);
+    return scaleLinear().domain(domain).range([10, boundsWidth]);
   }, [domain, boundsWidth]);
 
   const buckets = useMemo(() => (
@@ -44,8 +43,7 @@ export const Renderer = ({ width, height, domain, data, dataType }: RendererProp
             length: value
         } as d3.Bin<number, number>))
     :
-      d3
-        .bin()
+        bin()
         .value((d) => d)
         .domain(domain)
         .thresholds(xScale.ticks(BUCKET_NUMBER))(data as number[])
@@ -56,15 +54,15 @@ export const Renderer = ({ width, height, domain, data, dataType }: RendererProp
     [DataType.Categorical, DataType.DateTime].includes(dataType) ?
       max = Math.max(...Object.values(data)) :
       max = Math.max(...buckets.map((bucket) => bucket?.length))
-    return d3.scaleLinear().range([boundsHeight, 0]).domain([0, max]).nice();
+    return scaleLinear().range([boundsHeight, 0]).domain([0, max]).nice();
   }, [dataType, data, buckets, boundsHeight]);
 
   useEffect(() => {
-    const svg = d3.select(histRef.current);
+    const svg = select(histRef.current);
     svg.selectAll("*").remove();
 
     const xAxisGenerator = [DataType.Categorical, DataType.DateTime].includes(dataType) ?
-      d3.axisBottom(xLabelScale) : d3.axisBottom(xScale);
+      axisBottom(xLabelScale) : axisBottom(xScale);
     svg
       .append("g")
       .attr("transform", "translate(0," + boundsHeight + ")")
@@ -78,7 +76,7 @@ export const Renderer = ({ width, height, domain, data, dataType }: RendererProp
         .attr("transform", "rotate(-20)")
         .attr("font-size", "9px")
     }
-    const yAxisGenerator = d3.axisLeft(yScale);
+    const yAxisGenerator = axisLeft(yScale);
     svg
       .append("g")
       .call(yAxisGenerator);

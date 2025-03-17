@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
+import { scaleLinear, select, axisBottom, axisLeft } from "d3";
 import { Schema, NumberSchema, DataType, Value } from "@/schema";
 import { Filter, filterMatrix } from "@/utils/filters";
 import { transformOps, TransformType } from "@/utils/transform";
@@ -196,7 +196,7 @@ export const Scatterplot = ({
     setFilters((prevFilters) => prevFilters.filter((_, i) => i !== index));
   };
 
-  const svg = d3.select(scatterRef.current!);
+  const svg = select(scatterRef.current!);
   const domain = {
     x: [
       transformOps[xTransform]((schema[xAxisIdx] as NumberSchema).range.min),
@@ -207,16 +207,16 @@ export const Scatterplot = ({
       transformOps[yTransform]((schema[yAxisIdx] as NumberSchema).range.max)
     ]
   };
-  const xScale = d3.scaleLinear()
+  const xScale = scaleLinear()
     .domain(domain.x)
     .range([0, boundsWidth]);
 
-  const yScale = d3.scaleLinear()
+  const yScale = scaleLinear()
     .domain(domain.y)
     .range([boundsHeight, 0]);
 
-  const xAxis = d3.axisBottom(xScale);
-  const yAxis = d3.axisLeft(yScale);
+  const xAxis = axisBottom(xScale);
+  const yAxis = axisLeft(yScale);
 
   svg.selectAll('*').remove();
 
