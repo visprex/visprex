@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import "./DateTimeRangeSelector.css";
-import _ from "lodash";
 
 interface DateTimeRangeSelectorProps {
   domain: {
     min: number;
     max: number;
   };
-  onChange: React.Dispatch<React.SetStateAction<Date[]>>;
+  onChange: React.Dispatch<React.SetStateAction<[Date, Date]>>;
 }
 
 export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ domain, onChange }) => {
@@ -16,8 +15,8 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
   const range = useRef<HTMLDivElement>(null);
 
   const getPercent = useCallback(
-    (value: number) => _.round(((value - domain.min) / (domain.max - domain.min)) * 100),
-    [domain]
+    (value: number): number => Math.round(((value - domain.min) / (domain.max - domain.min)) * 100),
+    [domain.min, domain.max]
   );
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
       range.current.style.left = `${minPercent}%`;
       range.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }, [minVal, maxVal, getPercent]);
+  }, [minVal, maxVal, getPercent, domain.min, domain.max]);
 
   return (
     <div className="h-[10vh] flex items-center justify-center">
@@ -37,10 +36,10 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
         min={domain.min}
         max={domain.max}
         value={minVal}
-        onChange={event => {
-          const value = _.min([Number(event.target.value), maxVal - 1]) as number;
+        onChange={(event) => {
+          const value = Math.min(Number(event.target.value), maxVal - 1); // Fix: Removed Lodash
           setMinVal(value);
-          onChange([new Date(value), new Date(maxVal)]);
+          onChange([new Date(value), new Date(maxVal)] as const);
         }}
         className="thumb z-[1]"
       />
@@ -49,10 +48,10 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
         min={domain.min}
         max={domain.max}
         value={maxVal}
-        onChange={event => {
-          const value = _.max([Number(event.target.value), minVal + 1]) as number;
+        onChange={(event) => {
+          const value = Math.max(Number(event.target.value), minVal + 1); // Fix: Removed Lodash
           setMaxVal(value);
-          onChange([new Date(minVal), new Date(value)]);
+          onChange([new Date(minVal), new Date(value)] as const);
         }}
         className="thumb z-[2]"
       />

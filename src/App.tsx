@@ -89,7 +89,7 @@ export default function App() {
                   "group inline-flex items-center border-b-2 px-1 py-2 text-sm font-medium"
                 )}
                 aria-current={tab.name === currentTab ? "page" : undefined}
-                onClick={() => handleTabClick(tab.name)}
+                onClick={() => handleTabClick(tab.name)} rel="noreferrer"
               >
                 <tab.icon
                   className={classNames(
