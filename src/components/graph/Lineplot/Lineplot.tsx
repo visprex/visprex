@@ -1,9 +1,14 @@
 import { useRef, useState, useEffect } from 'react';
-import * as d3 from 'd3';
+import { scaleTime, scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
+import { axisBottom, axisLeft } from "d3-axis";
+import { bisector } from "d3-array";
+import { line } from "d3-shape";
+import { pointer } from "d3-selection";
+import { curveMonotoneX } from "d3-shape";
 import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "@/schema";
 import { Tooltip, InteractionData } from './Tooltip';
 import { DateTimeRangeSelector } from '@/components/query';
-import _ from 'lodash';
 
 interface LineplotProps {
   width: number;
@@ -53,24 +58,24 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         typeof d.y === 'number'
       ).sort((p1, p2) => p1.x.getTime() - p2.x.getTime());
 
-      const xScale = d3.scaleTime()
+      const xScale = scaleTime()
         .domain(xDomain)
         .range([0, boundsWidth]);
 
-      const yDomain = [_.min(data.map(d => d.y)), _.max(data.map(d => d.y))] as [number, number];
+      const yDomain = [Math.min(...data.map(d => d.y)), Math.max(...data.map(d => d.y))] as [number, number];
 
-      const yScale = d3.scaleLinear()
+      const yScale = scaleLinear()
         .domain(yDomain)
         .range([boundsHeight, 0]);
 
-      const svg = d3.select(lineRef.current);
+      const svg = select(lineRef.current);
       svg.selectAll('*').remove();
   
       const plot = svg.append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
   
-      const xAxis = d3.axisBottom(xScale);
-      const yAxis = d3.axisLeft(yScale);
+      const xAxis = axisBottom(xScale);
+      const yAxis = axisLeft(yScale);
   
       plot.append('g')
         .attr('class', 'x-axis')
@@ -81,10 +86,10 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         .attr('class', 'y-axis')
         .call(yAxis);
   
-      const lineGenerator = d3.line<{ x: Date; y: number }>()
+      const lineGenerator = line<{ x: Date; y: number }>()
         .x(d => xScale(d.x))
         .y(d => yScale(d.y))
-        .curve(d3.curveMonotoneX);
+        .curve(curveMonotoneX);
 
       plot.append('path')
         .datum(data)
@@ -93,7 +98,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         .attr('stroke-width', 2)
         .attr('d', lineGenerator);
   
-      const bisect = d3.bisector((d: { x: Date }) => d.x).left;
+      const bisect = bisector((d: { x: Date }) => d.x).left;
   
       const interactionLayer = plot.append('rect')
         .attr('width', boundsWidth)
@@ -111,7 +116,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
   
       interactionLayer
         .on('mousemove', (event: MouseEvent) => {
-          const [mouseX] = d3.pointer(event, interactionLayer.node()!);
+          const [mouseX] = pointer(event, interactionLayer.node()!);
           const x0 = xScale.invert(mouseX);
           const index = bisect(data, x0, 1);
           const d0 = data[index - 1];

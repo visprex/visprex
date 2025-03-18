@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ScaleLinear } from "d3";
+import { ScaleLinear } from "d3-scale";
 import { convertNumberNotation } from "@/utils/notation";
 
 type AxisLeftProps = {

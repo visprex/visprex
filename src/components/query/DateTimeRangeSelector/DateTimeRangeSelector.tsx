@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import "./DateTimeRangeSelector.css";
-import _ from "lodash";
 
 interface DateTimeRangeSelectorProps {
   domain: {
@@ -16,7 +15,7 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
   const range = useRef<HTMLDivElement>(null);
 
   const getPercent = useCallback(
-    (value: number) => _.round(((value - domain.min) / (domain.max - domain.min)) * 100),
+    (value: number) => Math.round(((value - domain.min) / (domain.max - domain.min)) * 100),
     [domain]
   );
 
@@ -38,7 +37,7 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
         max={domain.max}
         value={minVal}
         onChange={event => {
-          const value = _.min([Number(event.target.value), maxVal - 1]) as number;
+          const value = Math.min(Number(event.target.value), maxVal - 1) as number;
           setMinVal(value);
           onChange([new Date(value), new Date(maxVal)]);
         }}
@@ -50,7 +49,7 @@ export const DateTimeRangeSelector: React.FC<DateTimeRangeSelectorProps> = ({ do
         max={domain.max}
         value={maxVal}
         onChange={event => {
-          const value = _.max([Number(event.target.value), minVal + 1]) as number;
+          const value = Math.max(Number(event.target.value), minVal + 1) as number;
           setMaxVal(value);
           onChange([new Date(minVal), new Date(value)]);
         }}
