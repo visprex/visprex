@@ -1,10 +1,14 @@
 import { useRef, useState, useEffect } from 'react';
-import { scaleTime, scaleLinear, line, select, pointer, bisector, axisBottom, axisLeft, curveMonotoneX } from "d3";
-
+import { scaleTime, scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
+import { axisBottom, axisLeft } from "d3-axis";
+import { bisector } from "d3-array";
+import { line } from "d3-shape";
+import { pointer } from "d3-selection";
+import { curveMonotoneX } from "d3-shape";
 import { Schema, NumberSchema, DateTimeSchema, DataType, Value } from "@/schema";
 import { Tooltip, InteractionData } from './Tooltip';
 import { DateTimeRangeSelector } from '@/components/query';
-import _ from 'lodash';
 
 interface LineplotProps {
   width: number;
@@ -58,7 +62,7 @@ export const Lineplot = ({ width, height, matrix, schema, keys }: LineplotProps)
         .domain(xDomain)
         .range([0, boundsWidth]);
 
-      const yDomain = [_.min(data.map(d => d.y)), _.max(data.map(d => d.y))] as [number, number];
+      const yDomain = [Math.min(...data.map(d => d.y)), Math.max(...data.map(d => d.y))] as [number, number];
 
       const yScale = scaleLinear()
         .domain(yDomain)

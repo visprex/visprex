@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef } from "react";
-import { scaleBand, scaleLinear, bin, select, axisBottom, axisLeft } from "d3";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { bin } from "d3-array";
+import { select } from "d3-selection";
+import { axisBottom, axisLeft } from "d3-axis";
+
 import { Rectangle } from "./Rectangle";
 import { DataType } from "@/schema";
 

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { scaleLinear, select, axisBottom, axisLeft } from "d3";
+import { scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
+import { axisBottom, axisLeft } from "d3-axis";
 import { Schema, NumberSchema, DataType, Value } from "@/schema";
 import { Filter, filterMatrix } from "@/utils/filters";
 import { transformOps, TransformType } from "@/utils/transform";

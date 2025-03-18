@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { scaleBand, scaleLinear } from "d3";
+import { scaleBand, scaleLinear } from "d3-scale";
 import { InteractionData } from "./CorrelationMatrix";
 
 type RendererProps = {
