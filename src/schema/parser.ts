@@ -1,18 +1,6 @@
 import { DataType, Schema, CategoricalSchema, NumberSchema, DateTimeSchema, Value } from './schema';
 import dayjs from 'dayjs';
-
-function mean(values: number[]): number {
-  if (values.length === 0) return NaN;
-  return values.reduce((sum, val) => sum + val, 0) / values.length;
-}
-
-function countBy<T>(array: T[]): Record<string, number> {
-  return array.reduce((acc, val) => {
-    const key = String(val);
-    acc[key] = (acc[key] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-}
+import { mean, countBy } from 'lodash-es';
 
 function isDatetime(values: Value[]): boolean {
   return values.every((v) => dayjs(v).isValid());
