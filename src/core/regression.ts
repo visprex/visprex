@@ -1,5 +1,12 @@
 import { transpose, multiply, inverse, vectorToMatrix, flatten } from "./matrix";
 
+export type LinearRegressionResult = {
+  coefficients: number[];
+  standardErrors: number[];
+  confidenceIntervals: number[][];
+  zScores: number[];
+}
+
 /**
  * Performs Ordinary Least Squares (OLS) Linear Regression.
  *
@@ -20,12 +27,7 @@ export function linearRegression(
   y: number[],
   confidenceLevel: 0.90 | 0.95 | 0.99 = 0.95,
   addIntercept: boolean = true
-): {
-  coefficients: number[];
-  standardErrors: number[];
-  confidenceIntervals: number[][];
-  zScores: number[];
-} {
+): LinearRegressionResult {
   const n = X.length;
   const p = X[0].length;
 
