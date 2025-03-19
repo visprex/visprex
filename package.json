@@ -13,9 +13,11 @@
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "@react-spring/web": "^9.7.3",
+    "@types/lodash-es": "^4.17.12",
     "d3": "^7.8.5",
     "dayjs": "^1.11.13",
     "heroicons": "^2.1.1",
+    "lodash-es": "^4.17.21",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
