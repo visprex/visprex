@@ -31,7 +31,7 @@ export function linearRegression(
   const n = X.length;
   const p = X[0].length;
 
-  const _X = addIntercept ? X.map(row => [1, ...row]) : X;
+  const _X = transpose(addIntercept ? [Array(p).fill(1), ...X] : X);
   const _y = vectorToMatrix(y);
 
   const Xt = transpose(_X);

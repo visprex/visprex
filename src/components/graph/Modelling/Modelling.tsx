@@ -20,6 +20,9 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
   const [result, setResult] = useState<LinearRegressionResult | null>(null)
 
   useEffect(() => {
+    if (xIdxs.length === 0){
+      return
+    }
     setFeatureMatrix(matrix.filter((_, idx) => xIdxs.includes(idx)) as number[][]);
     setTargetVector(matrix[yIdx] as number[]);    
   }, [matrix, xIdxs, yIdx]);
@@ -83,7 +86,7 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
                 }
                 onClick={() => {
                   setXIdxs((prev) => {
-                    return xIdxs.includes(idx) ? prev.filter(v => v !== idx): [...prev, idx]
+                    return xIdxs.includes(idx) ? prev.filter(v => v !== idx) : [...prev, idx]
                   })
                 }}
               >
@@ -96,7 +99,19 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
       <h2>Linear Regression</h2>
       {
         result &&
-        <p>{schema[yIdx].key} = {result.coefficients[0]} {xIdxs.map((xIdx, idx) => {return ` + ${result.coefficients[idx+1]} * ${schema[xIdx].key}`})} </p>
+        <p>
+          <b>{schema[yIdx].key}</b>
+          {" = "}  
+          {result.coefficients[0] > 0 ? result.coefficients[0].toFixed(2): `- ${Math.abs(result.coefficients[0]).toFixed(2)}` }
+          {
+            xIdxs.map((xIdx, idx) => (
+              <React.Fragment key={xIdx}>
+                {" "}
+                {result.coefficients[idx + 1] > 0 ? "+" : "-"} {Math.abs(result.coefficients[idx + 1]).toFixed(2)} * <b>{schema[xIdx].key}</b>
+              </React.Fragment>
+            ))
+          }
+        </p>
       }
   </div>
   );
