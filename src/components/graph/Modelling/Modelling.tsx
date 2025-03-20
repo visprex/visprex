@@ -57,6 +57,9 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
               }
               onClick={() => {
                 setYIdx(idx)
+                if (xIdxs.includes(idx)) {
+                  setXIdxs(prev => [...prev.filter(v => v !== idx)])
+                }
               }}
             >
               {key}
@@ -72,14 +75,14 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
               <button
                 aria-multiselectable
                 key={key}
-                disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type)}
+                disabled={[DataType.Categorical, DataType.DateTime].includes(schema[idx].type) || idx === yIdx}
                 className={`
                   border ${xIdxs.includes(idx) ? 'bg-indigo-500 text-white' : 'border-indigo-500'}
                   m-1 rounded-md px-2 py-1 text-sm
                   ${xIdxs.includes(idx) ? 'bg-indigo-500' : 'text-indigo-500'}
                   ${xIdxs.includes(idx) ? 'opacity-100' : 'opacity-70'}
                   ${
-                    [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) ?
+                    [DataType.Categorical, DataType.DateTime].includes(schema[idx].type) || idx === yIdx ?
                     'cursor-not-allowed border-gray-400 bg-gray-200 opacity-50' : ''
                   }
                   h-8 whitespace-nowrap text-ellipsis`
@@ -96,7 +99,7 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
           }
         </div>
       </div>
-      <h2>Linear Regression</h2>
+      <label>Linear Regression: </label>
       {
         result &&
         <p>
@@ -112,7 +115,7 @@ export const Modelling: React.FC<ModellingProps> = ({ matrix, schema, keys }) =>
             ))
           }
         </p>
-      }
+      }      
   </div>
   );
 };
