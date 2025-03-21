@@ -28,10 +28,10 @@ export function linearRegression(
   confidenceLevel: 0.90 | 0.95 | 0.99 = 0.95,
   addIntercept: boolean = true
 ): LinearRegressionResult {
-  const n = X.length;
-  const p = X[0].length;
+  const n = X[0].length;
+  const p = X.length;
 
-  const _X = transpose(addIntercept ? [Array(p).fill(1), ...X] : X);
+  const _X = transpose(addIntercept ? [Array(n).fill(1), ...X] : X);
   const _y = vectorToMatrix(y);
 
   const Xt = transpose(_X);
@@ -54,7 +54,6 @@ export function linearRegression(
 
   // Compute standard errors: SE(β) = sqrt(diag((X'X)^-1) * σ²)
   const standardErrors = XtXInv.map((row, i) => Math.sqrt(row[i] * sigmaSquared));
-
   // Pre-computed Z-critical values
   const zCriticalValues: Record<number, number> = {
     0.90: 1.645,
