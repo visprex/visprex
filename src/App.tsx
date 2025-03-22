@@ -5,7 +5,7 @@ import { NavBar } from './components/navigation';
 import { NoDatasetSelected, NoDateTimeDetected, NoNumericalColumnsForLineplot, NotEnoughNumericalColumns} from './components/errors';
 import { Histogram, Scatterplot, CorrelationMatrix, Lineplot, Modelling } from './components/graph';
 import { classNames, transpose } from './utils';
-import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, VariableIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 
 export default function App() {
   const elementRef = useRef<HTMLDivElement | null>(null)
@@ -40,7 +40,7 @@ export default function App() {
     {
       name: "Modelling",
       href: "#modelling",
-      icon: CalculatorIcon
+      icon: VariableIcon,
     },
     {
       name: "Documentation",
