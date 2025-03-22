@@ -3,9 +3,9 @@ import { DataType, Schema, Value, inferSchema } from '@/schema';
 import { Dataloader, DataCard } from './components/data';
 import { NavBar } from './components/navigation';
 import { NoDatasetSelected, NoDateTimeDetected, NoNumericalColumnsForLineplot, NotEnoughNumericalColumns} from './components/errors';
-import { Histogram, Scatterplot, CorrelationMatrix, Lineplot } from './components/graph';
+import { Histogram, Scatterplot, CorrelationMatrix, Lineplot, Modelling } from './components/graph';
 import { classNames, transpose } from './utils';
-import { ChartBarIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, VariableIcon, CircleStackIcon, CubeTransparentIcon, CalculatorIcon, DocumentTextIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 
 export default function App() {
   const elementRef = useRef<HTMLDivElement | null>(null)
@@ -36,6 +36,11 @@ export default function App() {
       name: "Correlation Matrix",
       href: "#correlationmatrix",
       icon: CalculatorIcon,
+    },
+    {
+      name: "Modelling",
+      href: "#modelling",
+      icon: VariableIcon,
     },
     {
       name: "Documentation",
@@ -131,6 +136,7 @@ export default function App() {
             <NoDatasetSelected/>)
           }
           {currentTab === 'Correlation Matrix' && (schema.length > 0 ? <CorrelationMatrix height={450} width={width} matrix={matrix} keys={keys} schema={schema}/> : <NoDatasetSelected/>)}
+          {currentTab === 'Modelling' && (schema.length > 0 ? <Modelling matrix={matrix} schema={schema} keys={keys}/> : <NoDatasetSelected/>)}
         </div>
     </div>
   </div>
