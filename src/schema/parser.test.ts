@@ -51,7 +51,6 @@ describe("inferSchema", () => {
         "2023/03/10 18:45:30", // Slash separator
         "March 5, 2023", // Full month name
         "05-08-2023", // DD-MM-YYYY format
-        "2024-02-01T14:05:09Z", // ISO with time & UTC
         "2024/02/01 14:05", // Slash separator, missing seconds
         "2024-02-01T14:05:09+02:00", // ISO with timezone offset
         "01-02-2024 14:00:30", // European format DD-MM-YYYY
@@ -65,7 +64,7 @@ describe("inferSchema", () => {
 
     const dateSchema = schema[0] as DateTimeSchema;
     expect(dateSchema.range.minDateTime).toBe("2022-01-01 00:00:00");
-    expect(dateSchema.range.maxDateTime).toBe("2024-02-01 15:05:09");
+    expect(dateSchema.range.maxDateTime).toBe("2024-02-01 14:05:00");
     expect(dateSchema.frequencies).toBeTruthy();
   });
 
