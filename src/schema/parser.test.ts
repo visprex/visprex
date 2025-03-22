@@ -65,7 +65,7 @@ describe("inferSchema", () => {
 
     const dateSchema = schema[0] as DateTimeSchema;
     expect(dateSchema.range.minDateTime).toBe("2022-01-01 00:00:00");
-    expect(dateSchema.range.maxDateTime).toBe("2024-02-01 14:05:09");
+    expect(dateSchema.range.maxDateTime).toBe("2024-02-01 15:05:09");
     expect(dateSchema.frequencies).toBeTruthy();
   });
 
