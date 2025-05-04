@@ -59,6 +59,14 @@ You can find linear correlations for any pair of variables from the correlation 
 
 > Reference: [Check correlatins between features](https://docs.visprex.com/features/correlation/)
 
+#### Modelling
+You can run linear regressions on your uploaded dataset, with R-squared, standard errors, 95% confidence interval, Z-scores, and p-values diplayed along with the coefficients for each explanatory variable.
+
+![ols](https://github.com/user-attachments/assets/e3f1186c-fa99-4562-bf84-5af7010565de)
+
+> Reference: [Quantify your intuition with linear regression](https://docs.visprex.com/features/modelling/)
+
+
 ## Development
 
 ```bash
