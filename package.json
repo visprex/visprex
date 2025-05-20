@@ -1,7 +1,7 @@
 {
   "name": "visprex",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.9.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -43,6 +43,7 @@
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.2",
     "vite": "^6.2.1",
+    "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^3.0.8"
   }
 }
