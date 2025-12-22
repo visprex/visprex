@@ -39,7 +39,7 @@ RUN mkdir -p $NGINX_BUILD_DIR \
 RUN cd $NGINX_BUILD_DIR \
     && git clone --depth=1 https://github.com/google/ngx_brotli.git ngx_brotli \
     && cd ngx_brotli \
-    && git submodule update --init
+    && git submodule update --init --recursive
 
 RUN mkdir -p /var/cache/nginx /usr/share/nginx/html
 
