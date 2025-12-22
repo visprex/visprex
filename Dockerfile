@@ -44,6 +44,7 @@ RUN cd $NGINX_BUILD_DIR \
 RUN mkdir -p /var/cache/nginx /usr/share/nginx/html
 
 RUN cd $NGINX_BUILD_DIR \
+    && export CFLAGS="-O -Wno-error" \
     && ./configure \
         --prefix=/etc/nginx \
         --sbin-path=/usr/sbin/nginx \
