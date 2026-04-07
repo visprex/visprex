@@ -42,7 +42,7 @@
     "rollup-plugin-visualizer": "^5.14.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.2",
-    "vite": "^6.2.1",
+    "vite": "^6.4.2",
     "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^3.0.8"
   }
