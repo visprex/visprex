@@ -1,5 +1,5 @@
 # Stage 1: Build App
-FROM node:18-alpine AS vite-builder
+FROM node:20-alpine AS vite-builder
 
 WORKDIR /app
 
